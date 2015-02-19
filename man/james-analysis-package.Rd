@@ -1,40 +1,33 @@
-\name{james-analysis-package}
-\alias{james-analysis-package}
-\alias{james-analysis}
+\name{james.analysis-package}
+\alias{james.analysis-package}
+\alias{james.analysis}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+JAMES Analysis R Package
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+Analyze and visualize results of studies performed in JAMES, using the analysis tools from the extensions module. Compare algorithm performance, assess influence of parameter values, plot convergence curves, etc.
 }
 \details{
 \tabular{ll}{
-Package: \tab james-analysis\cr
+Package: \tab james.analysis\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2015-02-17\cr
-License: \tab What license is it under?\cr
+Version: \tab 0.1\cr
+Date: \tab 2015-02-19\cr
+License: \tab MIT\cr
 }
-~~ An overview of how to use the package, including the most important functions ~~
+This version is written for use in combination with version 0.2.1 of the JAMES extensions module.
 }
 \author{
-Who wrote it
-
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Herman De Beukelaer <Herman.DeBeukelaer@UGent.be>
 }
-\references{
-~~ Literature or other references for background information ~~
-}
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
-\keyword{ package }
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+JAMES Website: \url{http://www.jamesframework.org}
 }
-\examples{
-~~ simple examples of the most important functions ~~
-}
+%~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
+\keyword{ package }
+%\references{
+%}
+%\examples{
+%~~ simple examples of the most important functions ~~
+%}

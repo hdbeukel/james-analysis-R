@@ -11,8 +11,7 @@ Examples of how to use this R package will soon be provided at the [website][jam
 License and copyright
 =====================
 
-The JAMES analysis R package is licensed under the Apache License, Version 2.0, see LICENSE file or http://www.apache.org/licenses/LICENSE-2.0.
-Copyright information is stated in the NOTICE file.
+The JAMES analysis R package is licensed under the MIT License, see http://www.r-project.org/Licenses/MIT. Copyright information is stated in the LICENSE file.
 
 User forum
 ==========
