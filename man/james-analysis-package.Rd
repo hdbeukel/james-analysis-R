@@ -21,13 +21,11 @@ This version is written for use in combination with version 0.2.1 of the JAMES e
 \author{
 Herman De Beukelaer <Herman.DeBeukelaer@UGent.be>
 }
-\seealso{
+\references{
 JAMES Website: \url{http://www.jamesframework.org}
 }
 %~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation directory ~~
 \keyword{ package }
-%\references{
-%}
 %\examples{
 %~~ simple examples of the most important functions ~~
 %}
