@@ -8,12 +8,11 @@
 #' function will use the program named in the option "pdfviewer" (see
 #' \code{help(options)} for information on how this option is set).
 #' 
-#' The \code{bg} argument is ignored on Windows.
+#' @examples openPDF("pdf/test.pdf")
 #' 
-#' @param file relative path to the PDF file to be opened, of type "character"
-#' @param bg Indicates whether the PDF viewer should be opened in the background (Unix only)
+#' @param file character: relative path to the PDF file to be opened
 #' @export
-openPDF = function(file, bg = TRUE) 
+openPDF = function(file) 
 {
   # quote file name for in case it contains spaces
   file = paste('"', file, '"', sep="")
@@ -37,8 +36,6 @@ openPDF = function(file, bg = TRUE)
       stop(msg, "; please set pdf viewer using 'options(pdfviewer = ...)'")
     # create command to open pdf
     cmd <- paste(pdf, file)
-    if (bg) 
-      cmd <- paste(cmd, "&")
     # run command
     system(cmd)
   } else {

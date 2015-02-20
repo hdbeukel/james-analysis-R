@@ -4,12 +4,10 @@
 \alias{openPDF}
 \title{Open PDF file}
 \usage{
-openPDF(file, bg = TRUE)
+openPDF(file)
 }
 \arguments{
-\item{file}{relative path to the PDF file to be opened, of type "character"}
-
-\item{bg}{Indicates whether the PDF viewer should be opened in the background (Unix only)}
+\item{file}{character: relative path to the PDF file to be opened}
 }
 \description{
 Open a PDF file in the standard PDF viewer.
@@ -20,7 +18,8 @@ this is done by calling \code{shell.exec} and whatever program associated
 with the PDF file extension will be used. On Unix (including Mac OS X) the
 function will use the program named in the option "pdfviewer" (see
 \code{help(options)} for information on how this option is set).
-
-The \code{bg} argument is ignored on Windows.
+}
+\examples{
+openPDF("pdf/test.pdf")
 }
 
