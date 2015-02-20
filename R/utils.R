@@ -8,10 +8,8 @@
 #' function will use the program named in the option "pdfviewer" (see
 #' \code{help(options)} for information on how this option is set).
 #' 
-#' @examples openPDF("pdf/test.pdf")
-#' 
 #' @param file character: relative path to the PDF file to be opened
-#' @export
+#' @noRd
 openPDF = function(file) 
 {
   # quote file name for in case it contains spaces
