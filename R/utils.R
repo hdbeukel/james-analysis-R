@@ -8,30 +8,36 @@
 #' function will use the program named in the option "pdfviewer" (see
 #' \code{help(options)} for information on how this option is set).
 #' 
-#' @param file character: relative path to the PDF file to be opened
+#' @param file character vector: relative path to the PDF file to be opened
 #' @noRd
-openPDF = function(file) 
+openPDF <- function(file) 
 {
+  # check input
+  if (is.null(file) || is.na(file) || !is.character(file)){
+    stop("'file' should be of type character vector")
+  }
   # quote file name for in case it contains spaces
-  file = paste('"', file, '"', sep="")
+  file <- paste('"', file, '"', sep="")
   # implementation depends on operating system
-  OST = .Platform$OS.type
-  if (OST == "windows") 
+  OST <- .Platform$OS.type
+  if (OST == "windows") {
     shell.exec(file)
-  else if (OST == "unix") {
+  } else if (OST == "unix") {
     # check whether pdfviewer is set
-    pdf = getOption("pdfviewer")
-    msg = NULL
-    if (is.null(pdf)) 
-      msg = 'getOption("pdfviewer") is NULL'
-    else if (is.na(pdf))
-      msg = 'getOption("pdfviewer") is NA'
-    else if (!is.character(pdf))
-      msg = 'getOption("pdfviewer") should be of type "character"'
-    else if (nchar(pdf) == 0) 
-      msg = 'getOption("pdfviewer") is ""'
-    if (!is.null(msg)) 
+    pdf <- getOption("pdfviewer")
+    msg <- NULL
+    if (is.null(pdf)) {
+      msg <- 'getOption("pdfviewer") is NULL'
+    } else if (is.na(pdf)) {
+      msg <- 'getOption("pdfviewer") is NA'
+    } else if (!is.character(pdf)) {
+      msg <- 'getOption("pdfviewer") should be of type "character"'
+    } else if (nchar(pdf) == 0) {
+      msg <- 'getOption("pdfviewer") is ""'
+    }
+    if (!is.null(msg)) {
       stop(msg, "; please set pdf viewer using 'options(pdfviewer = ...)'")
+    }
     # create command to open pdf
     cmd <- paste(pdf, file)
     # run command
@@ -40,3 +46,11 @@ openPDF = function(file)
     stop("Unknown operating system (not Windows nor Unix).")
   }
 }
+
+# wrapper to output formatted strings
+printf <- function(...){
+  cat(sprintf(...))
+}
+
+
+

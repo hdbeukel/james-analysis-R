@@ -7,3 +7,5 @@ Author: Herman De Beukelaer
 Maintainer: Herman De Beukelaer <Herman.DeBeukelaer@UGent.be>
 Description: Analyze and visualize results of studies performed in JAMES, using the analysis tools from the extensions module.
 License: MIT + file LICENSE
+Imports: rjson (>= 0.2.15)
+LazyData: true
