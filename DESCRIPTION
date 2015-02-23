@@ -2,7 +2,7 @@ Package: james.analysis
 Type: Package
 Title: JAMES Analysis R Package
 Version: 0.1
-Date: 2015-02-17
+Date: 2015-02-23
 Author: Herman De Beukelaer
 Maintainer: Herman De Beukelaer <Herman.DeBeukelaer@UGent.be>
 Description: Analyze and visualize results of studies performed in JAMES, using the analysis tools from the extensions module.

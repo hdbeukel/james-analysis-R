@@ -1,21 +1,21 @@
 #' Read analysis results from JSON file
 #'
-#' Read results from a JSON file produced by the analysis tools in the JAMES extensions module.
+#' Read results from a JSON file produced by the analysis tools from the JAMES extensions module.
 #'
 #' @param file character vector: relative path to a JSON file containing results produced by
-#'             the analysis tools in the JAMES extensions module
-#' @return S3 object of type "analysis.results" containing the results of running a number of
+#'             the analysis tools from the JAMES extensions module
+#' @return S3 object of class "james" containing the results of running a number of
 #'         searches on a set of problems, performing a number of repeated runs per search
 #'
 #' @examples
 #' # get path to raw JSON file included in package distribution
-#' json.file <- system.file("extdata", "results.json", package = "james.analysis")
+#' json.file <- system.file("extdata", "data.json", package = "james.analysis")
 #' 
 #' # read results from file
-#' results <- read.analysis.results(json.file)
+#' data <- readJAMES(json.file)
 #'
 #' @export
-readAnalysisResults <- function(file) {
+readJAMES <- function(file) {
   
   # check input
   if (is.null(file) || is.na(file) || !is.character(file)){
@@ -24,38 +24,114 @@ readAnalysisResults <- function(file) {
   # read JSON file
   results <- rjson::fromJSON(file = file)
   # set class name
-  class(results) <- "analysis.results"
+  class(results) <- "james"
   
   return(results)
 }
 
-#' Extract best solution evaluations
+#' Get names of analyzed problems
 #' 
-#' TODO
+#' Extracts the names of all problems for which analysis results are contained in the given data.
+#' If a \code{filter} is set, only those problem names matching the given \link{regular expression}
+#' are returned (pattern matching is done with \code{\link{grep}}). This is a generic S3 method.
+#' 
+#' @param data data object containing the analysis results
+#' @param filter \link{regular expression} (optional). Only problem
+#'               names that match the given regex are returned, if any.
+#'               
+#' @return Vector of strings containing the names of all analyzed problems
+#'         that occur in the given data and match the applied filter (if any).
 #' 
 #' @export
-extractBestSolutionEvaluations <- function(results, problem, search, ...){
-  UseMethod("extractBestSolutionEvaluations")
+getProblems <- function(data, filter){
+  UseMethod("getProblems")
+}
+#' @export
+getProblems.james <- function(data, filter){
+  problem.names <- names(data)
+  # filter, if set
+  if(!missing(filter)){
+    problem.names <- grep(pattern = filter, problem.names, value = TRUE)
+  }
+  return(problem.names)
 }
 
-#' TODO
+#' Get names of applied searches
 #' 
-#' TODO
-#'
-#'  @export
-extractBestSolutionEvaluations.analysis.results <- function(results, problem, search, ...){
-  cat("TODO")
+#' Extracts the names of all searches that have been applied to the given \code{problem}.
+#' If a \code{filter} is set, only those search names matching the given \link{regular expression}
+#' are returned (pattern matching is done with \code{\link{grep}}). This is a generic S3 method.
+#' 
+#' @param data data object containing the analysis results
+#' @param problem name of the analyzed problem
+#' @param filter \link{regular expression} (optional). Only search
+#'               names that match the given regex are returned, if any.
+#'               
+#' @return Vector of strings containing the names of all searches that have
+#'         been applied to the given problem and match the applied filter (if any).
+#' 
+#' @export
+getSearches <- function(data, problem, filter){
+  UseMethod("getSearches")
+}
+#' @export
+getSearches.james <- function(data, problem, filter){
+  # extract problem data
+  problem.data <- data[[problem]]
+  # check if data is available
+  if(is.null(problem.data)){
+    msg <- sprintf("'data' does not contain results for problem \"%s\"", problem)
+    stop(msg)
+  }
+  # get all applied searches
+  search.names <- names(problem.data)
+  # filter, if set
+  if(!missing(filter)){
+    search.names <- grep(pattern = filter, search.names, value = TRUE);
+  }
+  return(search.names)
+}
+
+#' Get number of applied search runs
+#' 
+#' Get the number of applied runs of the given \code{search} when solving the
+#' given \code{problem}. This is a generic S3 method.
+#' 
+#' @param data data object containing the analysis results
+#' @param problem name of the analyzed problem
+#' @param search name of the applied search
+#'   
+#' @return numeric: number of applied search runs
+#'   
+#' @export
+getNumRuns <- function(data, problem, search){
+  UseMethod("getNumRuns")
+}
+#' @export
+getNumRuns.james <- function(data, problem, search){
+  # extract search runs
+  runs <- data[[problem]][[search]]
+  # check if data is available
+  if(is.null(runs)){
+    msg <- sprintf("'data' does not contain results for search \"%s\" being applied to problem \"%s\"",
+                  search,
+                  problem)
+    stop(msg)
+  }
+  # count runs
+  num.runs <- length(runs)
+  return(num.runs)
 }
 
 #' @export
-summary.analysis.results <- function(object, ...){
+summary.james <- function(object, ...){
   
   results <- object
   
   # determine column widths
   col.widths <- c(9,7,5)
-  problem.names <- names(results)
-  search.names <- unique(sapply(results, names))
+  problem.names <- getProblems(results)
+  search.names <- unique(unlist(sapply(problem.names, function(p){getSearches(results, p)})))
   col.widths[1] <- max(col.widths[1], max(sapply(problem.names, nchar)) + 1)
   col.widths[2] <- max(col.widths[2], max(sapply(search.names, nchar)) + 1)
   format <- sprintf("%%-%ds %%-%ds %%%ds \n", col.widths[1], col.widths[2], col.widths[3])
@@ -64,15 +140,12 @@ summary.analysis.results <- function(object, ...){
   printf(format, "Problem:", "Search:", "Runs:")
   printf(format, "--------", "-------", "-----")
   
-  # iterate over problems
-  nprob <- length(results)
-  prob.names <- names(results)
-  for (p in 1:nprob){
-    nsearch <- length(results[[p]])
-    search.names <- names(results[[p]])
-    for (s in 1:nsearch){
-      nruns <- length(results[[p]][[s]])
-      printf(format, prob.names[p], search.names[s], nruns)
+  # print info of applied searches per problem
+  for (p in problem.names){
+    search.names <- getSearches(results, p)
+    for (s in search.names){
+      nruns <- getNumRuns(results, p, s)
+      printf(format, p, s, nruns)
     }
   }
   

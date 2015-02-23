@@ -6,14 +6,14 @@
 JAMES Analysis R Package
 }
 \description{
-Analyze and visualize results of studies performed in JAMES, using the analysis tools from the extensions module. Compare algorithm performance, assess influence of parameter values, plot convergence curves, etc.
+This package can be used to further analyze and visualize results produced by the analysis tools from the extensions module of the JAMES framework. Functions are provided to plot convergence curves, compare algorithm performance, assess the influence of parameter values, etc.
 }
 \details{
 \tabular{ll}{
 Package: \tab james.analysis\cr
 Type: \tab Package\cr
 Version: \tab 0.1\cr
-Date: \tab 2015-02-19\cr
+Date: \tab 2015-02-23\cr
 License: \tab MIT\cr
 }
 This version is written for use in combination with version 0.2.1 of the JAMES extensions module.

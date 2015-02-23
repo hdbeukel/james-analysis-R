@@ -1,11 +1,11 @@
 #' Open PDF file
 #' 
 #' Open a PDF file in the standard PDF viewer.
-#'
-#' Opens the given PDF \code{file} in the default PDF viewer. Under Windows,
-#' this is done by calling \code{shell.exec} and whatever program associated
-#' with the PDF file extension will be used. On Unix (including Mac OS X) the
-#' function will use the program named in the option "pdfviewer" (see
+#' 
+#' Opens the given PDF \code{file} in the default PDF viewer. Under Windows, 
+#' this is done by calling \code{shell.exec} and whatever program associated 
+#' with the PDF file extension will be used. On Unix (including Mac OS X) the 
+#' function will use the program named in the option "pdfviewer" (see 
 #' \code{help(options)} for information on how this option is set).
 #' 
 #' @param file character vector: relative path to the PDF file to be opened
