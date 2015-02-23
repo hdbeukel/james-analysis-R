@@ -7,15 +7,17 @@
 readJAMES(file)
 }
 \arguments{
-\item{file}{character vector: relative path to a JSON file containing results produced by
-the analysis tools from the JAMES extensions module}
+\item{file}{character vector: relative path to a JSON file containing results
+produced by the analysis tools from the JAMES extensions module}
 }
 \value{
-S3 object of class "james" containing the results of running a number of
-        searches on a set of problems, performing a number of repeated runs per search
+S3 object of class "james" containing the results of running a number
+  of searches on a set of problems, performing a number of repeated runs per
+  search
 }
 \description{
-Read results from a JSON file produced by the analysis tools from the JAMES extensions module.
+Read results from a JSON file produced by the analysis tools from the JAMES
+extensions module.
 }
 \examples{
 # get path to raw JSON file included in package distribution

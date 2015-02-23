@@ -11,16 +11,17 @@ getSearches(data, problem, filter)
 
 \item{problem}{name of the analyzed problem}
 
-\item{filter}{\link{regular expression} (optional). Only search
-              names that match the given regex are returned, if any.}
+\item{filter}{\link{regular expression} (optional). Only search names that
+  match the given regex are returned, if any.}
 }
 \value{
-Vector of strings containing the names of all searches that have
-        been applied to the given problem and match the applied filter (if any).
+Vector of strings containing the names of all searches that have been
+  applied to the given problem and match the applied filter (if any).
 }
 \description{
-Extracts the names of all searches that have been applied to the given \code{problem}.
-If a \code{filter} is set, only those search names matching the given \link{regular expression}
-are returned (pattern matching is done with \code{\link{grep}}). This is a generic S3 method.
+Extracts the names of all searches that have been applied to the given
+\code{problem}. If a \code{filter} is set, only those search names matching
+the given \link{regular expression} are returned (pattern matching is done
+with \code{\link{grep}}). This is a generic S3 method.
 }
 
