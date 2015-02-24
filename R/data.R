@@ -34,6 +34,56 @@ readJAMES <- function(file) {
   return(results)
 }
 
+############################### MERGE - REDUCE ############################## 
+
+#' Merge analysis results
+#'
+#' Merge results from different analyses. If runs of the same search
+#' applied to the same problem are found in both data sets, these runs
+#' are merged into a single list.
+#' 
+#' @param data1 results from the first analysis
+#' @param data2 results from the second analysis
+#' 
+#' @return merged data
+#'
+#' @export
+mergeJAMES <- function(data1, data2){
+  UseMethod("mergeJAMES")
+}
+#' @export
+mergeJAMES.james <- function(data1, data2){
+  # check input
+  if(!inherits(data2, "james")){
+    stop("'data2' should also be of class \"james\"")
+  }
+  # copy first data set
+  merged <- data1
+  # merge results from second data set into first
+  for(problem in getProblems(data2)){
+    for(search in getSearches(data2, problem)){
+      # retrieve existing search runs, empty list if none
+      existing.runs <- tryCatch(
+                          getSearchRuns(merged, problem, search),
+                          error = function(e){
+                            list()
+                          }
+                       )
+      # retrieve new search runs
+      new.runs <- getSearchRuns(data2, problem, search)
+      # merge runs
+      merged.runs <- c(existing.runs, new.runs)
+      # update merged data
+      if(length(getProblems(merged, filter = sprintf("^%s$", problem))) == 0){
+        # first search for this problem: add problem
+        merged[[problem]] <- list()
+      }
+      merged[[problem]][[search]] <- merged.runs
+    }
+  }
+  return(merged)
+}
+
 ################################## GETTERS ################################## 
 
 #' Get names of analyzed problems
