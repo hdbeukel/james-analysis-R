@@ -84,6 +84,49 @@ mergeJAMES.james <- function(data1, data2){
   return(merged)
 }
 
+#' Reduce analysis results to selected problems and searches
+#' 
+#' Reduce the given \code{data} by filtering the analyzed problems and applied 
+#' searches based on the given \link{regular expression} (pattern matching is
+#' done with \code{\link{grep}}).
+#' 
+#' @param data data object containing the analysis results
+#' @param problems \link{regular expression} used to filter the problems
+#' @param searches \link{regular expression} used to filter the searches
+#'   
+#' @return Reduced data set containing only those problems and searches whose
+#'   names match the respective regular expressions.
+#'   
+#' @export
+reduceJAMES <- function(data, problems = ".*", searches = ".*"){
+  UseMethod("reduceJAMES")
+}
+#' @export
+reduceJAMES.james <- function(data, problems = ".*", searches = ".*"){
+  # determine which problems to drop
+  problem.names <- getProblems(data)
+  drop.problems <- grep(pattern = problems, problem.names, value = TRUE, invert = TRUE)
+  # drop those problems
+  data[drop.problems] <- NULL
+  # iterate over retained problems to filter searches
+  for(problem in getProblems(data)){
+    # determine which searches to drop
+    search.names <- getSearches(data, problem)
+    drop.searches <- grep(pattern = searches, search.names, value = TRUE, invert = TRUE)
+    # drop those searches
+    data[[problem]][drop.searches] <- NULL
+    # drop problem if all searches have been dropped
+    if(length(data[[problem]]) == 0){
+      data[[problem]] <- NULL
+    }
+  }
+  # check if data has been retained
+  if(length(data) == 0){
+    stop("no data is retained using the given regular expressions")
+  }
+  return(data)
+}
+
 ################################## GETTERS ################################## 
 
 #' Get names of analyzed problems
