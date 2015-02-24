@@ -74,7 +74,7 @@ mergeJAMES.james <- function(data1, data2){
       # merge runs
       merged.runs <- c(existing.runs, new.runs)
       # update merged data
-      if(length(getProblems(merged, filter = sprintf("^%s$", problem))) == 0){
+      if(length(getProblems(merged, filter = glob2rx(problem))) == 0){
         # first search for this problem: add problem
         merged[[problem]] <- list()
       }
@@ -87,15 +87,20 @@ mergeJAMES.james <- function(data1, data2){
 #' Reduce analysis results to selected problems and searches
 #' 
 #' Reduce the given \code{data} by filtering the analyzed problems and applied 
-#' searches based on the given \link{regular expression} (pattern matching is
-#' done with \code{\link{grep}}).
+#' searches based on the given list of names or \link{regular expression} 
+#' (pattern matching is done with \code{\link{grep}}).
 #' 
 #' @param data data object containing the analysis results
-#' @param problems \link{regular expression} used to filter the problems
-#' @param searches \link{regular expression} used to filter the searches
+#' @param problems \link{regular expression} or list of strings. Only those 
+#'   problems that match the regular expression or occur in the list are 
+#'   retained.
+#' @param searches \link{regular expression} or list of strings. Only those 
+#'   searches that match the regular expression or occur in the list are 
+#'   retained.
 #'   
-#' @return Reduced data set containing only those problems and searches whose
-#'   names match the respective regular expressions.
+#' @return Reduced data set containing only those problems and searches whose 
+#'   names match the respective regular expression or occur in the respective 
+#'   list of strings.
 #'   
 #' @export
 reduceJAMES <- function(data, problems = ".*", searches = ".*"){
@@ -105,14 +110,22 @@ reduceJAMES <- function(data, problems = ".*", searches = ".*"){
 reduceJAMES.james <- function(data, problems = ".*", searches = ".*"){
   # determine which problems to drop
   problem.names <- getProblems(data)
-  drop.problems <- grep(pattern = problems, problem.names, value = TRUE, invert = TRUE)
+  if(is.list(problems)){
+    drop.problems <- setdiff(problem.names, problems)
+  } else {
+    drop.problems <- grep(pattern = problems, problem.names, value = TRUE, invert = TRUE)
+  }
   # drop those problems
   data[drop.problems] <- NULL
   # iterate over retained problems to filter searches
   for(problem in getProblems(data)){
     # determine which searches to drop
     search.names <- getSearches(data, problem)
-    drop.searches <- grep(pattern = searches, search.names, value = TRUE, invert = TRUE)
+    if(is.list(searches)){
+      drop.searches <- setdiff(search.names, searches)
+    } else {
+      drop.searches <- grep(pattern = searches, search.names, value = TRUE, invert = TRUE)
+    }
     # drop those searches
     data[[problem]][drop.searches] <- NULL
     # drop problem if all searches have been dropped
@@ -122,7 +135,7 @@ reduceJAMES.james <- function(data, problems = ".*", searches = ".*"){
   }
   # check if data has been retained
   if(length(data) == 0){
-    stop("no data is retained using the given regular expressions")
+    stop("no data is retained")
   }
   return(data)
 }

@@ -9,17 +9,22 @@ reduceJAMES(data, problems = ".*", searches = ".*")
 \arguments{
 \item{data}{data object containing the analysis results}
 
-\item{problems}{\link{regular expression} used to filter the problems}
+\item{problems}{\link{regular expression} or list of strings. Only those
+problems that match the regular expression or occur in the list are
+retained.}
 
-\item{searches}{\link{regular expression} used to filter the searches}
+\item{searches}{\link{regular expression} or list of strings. Only those
+  searches that match the regular expression or occur in the list are
+  retained.}
 }
 \value{
 Reduced data set containing only those problems and searches whose
-  names match the respective regular expressions.
+  names match the respective regular expression or occur in the respective
+  list of strings.
 }
 \description{
 Reduce the given \code{data} by filtering the analyzed problems and applied
-searches based on the given \link{regular expression} (pattern matching is
-done with \code{\link{grep}}).
+searches based on the given list of names or \link{regular expression}
+(pattern matching is done with \code{\link{grep}}).
 }
 
