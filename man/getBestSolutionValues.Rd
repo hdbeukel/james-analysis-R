@@ -15,7 +15,7 @@ getBestSolutionValues(data, problem, search)
 }
 \value{
 Numeric vector containing the values of the best found solutions
-  during each run
+  during each run.
 }
 \description{
 Get the values of the best found solutions during all runs of the given

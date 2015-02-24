@@ -86,7 +86,12 @@ getSearches <- function(data, problem, filter){
 #' @export
 getSearches.james <- function(data, problem, filter){
   # extract problem data
-  problem.data <- extractProblem(data, problem)
+  problem.data <- data[[problem]]
+  # check if data is available
+  if(is.null(problem.data)){
+    msg <- sprintf("'data' does not contain results for problem \"%s\"", problem)
+    stop(msg)
+  }
   # get all applied searches
   search.names <- names(problem.data)
   # filter, if set
@@ -94,6 +99,53 @@ getSearches.james <- function(data, problem, filter){
     search.names <- grep(pattern = filter, search.names, value = TRUE);
   }
   return(search.names)
+}
+
+#' Get search run data
+#' 
+#' Extract the data corresponding to the subsequent runs of a specific 
+#' \code{search} being applied to a specific \code{problem}. This is a generic 
+#' S3 method.
+#' 
+#' @param data data object containing the analysis results
+#' @param problem name of the analyzed problem
+#' @param search name of the applied search
+#'   
+#' @return A list containing one element for each search run.
+#'   
+#'   Each run has at least two elements \code{time} and \code{values}, which are
+#'   both numeric vectors. The \code{time} vector indicates when the best 
+#'   solution was updated during search and the new best solution's value is 
+#'   found at the respective index in \code{values}. Times are expressed in 
+#'   milliseconds since starting the search. A time of -1 indicates that the 
+#'   search was not yet running, which e.g. occurs when a local search adopts a 
+#'   random current solution during initialization. Times are always positive 
+#'   (or -1) and increasing.
+#'   
+#'   If contained in the given \code{data}, a run also has an element 
+#'   \code{best.solution} representing the final best solution found during that
+#'   search run. The last element of \code{values} then indicates the value of 
+#'   this best solution. When writing results obtained from the analysis tools 
+#'   in the JAMES extensions module to a JSON file, one should provide a JSON 
+#'   converter for the solution type of the analyzed problems if it is desired 
+#'   that the actual best found solutions are contained in the output file.
+#'   
+#' @export
+getSearchRuns <- function(data, problem, search){
+  UseMethod("getSearchRuns")
+}
+#' @export
+getSearchRuns.james <- function(data, problem, search){
+  # extract search runs
+  runs <- data[[problem]][[search]]
+  # check if data is available
+  if(is.null(runs)){
+    msg <- sprintf("'data' does not contain results for search \"%s\" being applied to problem \"%s\"",
+                   search,
+                   problem)
+    stop(msg)
+  }
+  return(runs)
 }
 
 #' Get number of applied search runs
@@ -108,13 +160,13 @@ getSearches.james <- function(data, problem, filter){
 #' @return numeric: number of applied search runs
 #'   
 #' @export
-getNumRuns <- function(data, problem, search){
-  UseMethod("getNumRuns")
+getNumSearchRuns <- function(data, problem, search){
+  UseMethod("getNumSearchRuns")
 }
 #' @export
-getNumRuns.james <- function(data, problem, search){
+getNumSearchRuns.james <- function(data, problem, search){
   # extract search runs
-  runs <- extractRuns(data, problem, search)
+  runs <- getSearchRuns(data, problem, search)
   # count runs
   num.runs <- length(runs)
   return(num.runs)
@@ -131,7 +183,7 @@ getNumRuns.james <- function(data, problem, search){
 #' @param search name of the applied search
 #'   
 #' @return Numeric vector containing the values of the best found solutions
-#'   during each run
+#'   during each run.
 #'   
 #' @export
 getBestSolutionValues <- function(data, problem, search){
@@ -140,44 +192,10 @@ getBestSolutionValues <- function(data, problem, search){
 #' @export
 getBestSolutionValues.james <- function(data, problem, search){
   # extract search runs
-  runs <- extractRuns(data, problem, search)
+  runs <- getSearchRuns(data, problem, search)
   # get best solution values
   best.solution.values <- sapply(runs, function(run){ tail(run$values, n=1) })
   return(best.solution.values)
-}
-
-################################## INTERNAL #################################
-
-# extract problem
-extractProblem <- function(data, problem){
-  UseMethod("extractProblem")
-}
-extractProblem.james <- function(data, problem){
-  # extract problem
-  problem.data <- data[[problem]]
-  # check if data is available
-  if(is.null(problem.data)){
-    msg <- sprintf("'data' does not contain results for problem \"%s\"", problem)
-    stop(msg)
-  }
-  return(problem.data)
-}
-
-# extract search runs
-extractRuns <- function(data, problem, search){
-  UseMethod("extractRuns")
-}
-extractRuns.james <- function(data, problem, search){
-  # extract search runs
-  runs <- data[[problem]][[search]]
-  # check if data is available
-  if(is.null(runs)){
-    msg <- sprintf("'data' does not contain results for search \"%s\" being applied to problem \"%s\"",
-                   search,
-                   problem)
-    stop(msg)
-  }
-  return(runs)
 }
 
 ################################## SUMMARY ################################## 
@@ -212,7 +230,7 @@ summary.james <- function(object, ...){
   for (problem in problem.names){
     search.names <- getSearches(results, problem)
     for (search in search.names){
-      nruns <- getNumRuns(results, problem, search)
+      nruns <- getNumSearchRuns(results, problem, search)
       values <- getBestSolutionValues(results, problem, search)
       mean.value <- mean(values)
       sd.value <- sd(values)
