@@ -17,6 +17,6 @@ merged data
 \description{
 Merge results from different analyses. If runs of the same search
 applied to the same problem are found in both data sets, these runs
-are merged into a single list.
+are merged into a single list. This is a generic S3 method.
 }
 

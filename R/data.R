@@ -40,7 +40,7 @@ readJAMES <- function(file) {
 #'
 #' Merge results from different analyses. If runs of the same search
 #' applied to the same problem are found in both data sets, these runs
-#' are merged into a single list.
+#' are merged into a single list. This is a generic S3 method.
 #' 
 #' @param data1 results from the first analysis
 #' @param data2 results from the second analysis
@@ -88,7 +88,8 @@ mergeJAMES.james <- function(data1, data2){
 #' 
 #' Reduce the given \code{data} by filtering the analyzed problems and applied 
 #' searches based on the given list of names or \link{regular expression} 
-#' (pattern matching is done with \code{\link{grep}}).
+#' (pattern matching is done with \code{\link{grep}}). This is a generic S3
+#' method.
 #' 
 #' @param data data object containing the analysis results
 #' @param problems \link{regular expression} or list of strings. Only those 

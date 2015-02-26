@@ -25,6 +25,7 @@ Reduced data set containing only those problems and searches whose
 \description{
 Reduce the given \code{data} by filtering the analyzed problems and applied
 searches based on the given list of names or \link{regular expression}
-(pattern matching is done with \code{\link{grep}}).
+(pattern matching is done with \code{\link{grep}}). This is a generic S3
+method.
 }
 
