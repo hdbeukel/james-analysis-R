@@ -4,18 +4,64 @@
 \alias{plotConvergence}
 \title{Plot convergence curves}
 \usage{
-plotConvergence(data, problem)
+plotConvergence(data, problem, col = "black", type = "l", lty = NULL,
+  title = "Convergence curve(s)", xlab = "Runtime (ms)", ylab = "Value",
+  legend = TRUE, legend.pos = "bottomright", legend.inset = c(0.02, 0.05),
+  legend.names = NULL, ...)
 }
 \arguments{
 \item{data}{data object containing the analysis results}
 
 \item{problem}{name of the problem for which the plot is made. Can be omitted
-  if the \code{data} contains results for a single problem only.}
+if the \code{data} contains results for a single problem only.}
+
+\item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
+providing a vector. Defaults to black.}
+
+\item{type}{plot type, defaults to lines.}
+
+\item{lty}{line type(s), used cyclically when providing a vector. If set to
+\code{NULL}, line types default to 1:n where n is the number of plotted
+curves.}
+
+\item{title}{plot title.}
+
+\item{xlab}{x-axis label.}
+
+\item{ylab}{y-axis label.}
+
+\item{legend}{logical: indicates whether a legend should be added to the
+plot. Defaults to TRUE.}
+
+\item{legend.pos}{position of the legend, specified as a keyword  keyword
+from the list \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"},
+\code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"},
+\code{"right"} and \code{"center"}. Defaults to \code{"bottomright"} as
+this area of the plot usually has a lot of available space.}
+
+\item{legend.inset}{inset distance(s) from the margins as a fraction of the
+plot region. If a single value is given, it is used for both margins; if
+two values are given, the first is used for \code{x-}distance, the second
+for \code{y-}distance.}
+
+\item{legend.names}{names to be shown in the legend. If set to \code{NULL},
+the names default to the search names obtained from calling
+\code{\link{getSearches}} on the given \code{data} and \code{problem}.}
+
+\item{...}{optional other arguments passed to \code{\link{matplot}}.}
 }
 \description{
 Creates a plot showing the convergence curve of each search that has been
-applied to the given \code{problem}, averaged over all search runs. If the
-\code{data} contains results for a single problem only, the argument
-\code{problem} can be omitted.
+applied to the given \code{problem}, averaged over all search runs. This is a
+generic S3 method.
+}
+\details{
+If the \code{data} contains results for a single problem only, the argument
+\code{problem} can be omitted. If desired to plot convergence curves for a
+selection of the applied searches, use \link{reduceJAMES} to extract the
+respective data.
+
+The curves are plotted using \link{matplot}. More information about the
+graphical parameters are provided in the documentation of this function.
 }
 
