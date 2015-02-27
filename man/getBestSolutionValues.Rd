@@ -9,9 +9,12 @@ getBestSolutionValues(data, problem, search)
 \arguments{
 \item{data}{data object containing the analysis results}
 
-\item{problem}{name of the analyzed problem}
+\item{problem}{name of the analyzed problem. Can be omitted if the
+\code{data} contains results for a single problem only.}
 
-\item{search}{name of the applied search}
+\item{search}{name of the applied search. Can be omitted if the \code{data}
+  contains results for a single search only (for the considered
+  \code{problem}).}
 }
 \value{
 Numeric vector containing the values of the best found solutions
@@ -21,5 +24,11 @@ Numeric vector containing the values of the best found solutions
 Get the values of the best found solutions during all runs of the given
 \code{search} applied to the given \code{problem}. This is a generic S3
 method.
+}
+\details{
+If the \code{data} contains results for a single problem only, the argument
+\code{problem} can be omitted. Likewise, if -- for the considered
+\code{problem} -- results are available for a single search only, the
+argument \code{search} can be omitted.
 }
 

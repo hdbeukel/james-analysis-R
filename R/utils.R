@@ -52,5 +52,36 @@ printf <- function(...){
   cat(sprintf(...))
 }
 
+# Get the name of the single problem contained in the given data.
+# If the data contains results for more than one problem, an error
+# is thrown.
+getSingleProblem <- function(data){
+  all.problems <- getProblems(data)
+  if(length(all.problems) > 1){
+    stop("'data' contains more than one problem; please specifiy 'problem'")
+  } else {
+    # return name of only problem
+    return(all.problems[1])
+  }
+}
+
+# Get the name of the single search applied to the given problem
+# in the given data. If the data contains results for more than
+# one search for this problem, an error is thrown.
+getSingleSearch <- function(data, problem){
+  all.searches <- getSearches(data, problem)
+  if(length(all.searches) > 1){
+    msg <- sprintf("'data' contains more than one search for problem \"%s\"; please specify 'search'", problem)
+    stop(msg)
+  } else {
+    # return name of only search
+    return(all.searches[1])
+  }
+}
+
+
+
+
+
 
 

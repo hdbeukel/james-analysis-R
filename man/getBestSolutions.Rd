@@ -9,9 +9,12 @@ getBestSolutions(data, problem, search)
 \arguments{
 \item{data}{data object containing the analysis results}
 
-\item{problem}{name of the analyzed problem}
+\item{problem}{name of the analyzed problem. Can be omitted if the
+\code{data} contains results for a single problem only.}
 
-\item{search}{name of the applied search}
+\item{search}{name of the applied search. Can be omitted if the \code{data}
+  contains results for a single search only (for the considered
+  \code{problem}).}
 }
 \value{
 List containing the best found solutions during each run. May contain
@@ -23,6 +26,11 @@ Get the best found solutions during the different runs of the given
 method.
 }
 \details{
+If the \code{data} contains results for a single problem only, the argument
+\code{problem} can be omitted. Likewise, if -- for the considered
+\code{problem} -- results are available for a single search only, the
+argument \code{search} can be omitted.
+
 When writing results obtained from the analysis tools in the JAMES extensions
 module to a JSON file, one should provide a JSON converter for the solution
 type of the analyzed problems if it is desired that the actual best found

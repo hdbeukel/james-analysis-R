@@ -9,7 +9,8 @@ getSearches(data, problem, filter)
 \arguments{
 \item{data}{data object containing the analysis results}
 
-\item{problem}{name of the analyzed problem}
+\item{problem}{name of the analyzed problem. Can be omitted if the
+\code{data} contains results for a single problem only.}
 
 \item{filter}{\link{regular expression} (optional). Only search names that
   match the given regex are returned, if any.}
@@ -20,8 +21,12 @@ Vector of strings containing the names of all searches that have been
 }
 \description{
 Extracts the names of all searches that have been applied to the given
-\code{problem}. If a \code{filter} is set, only those search names matching
-the given \link{regular expression} are returned (pattern matching is done
-with \code{\link{grep}}). This is a generic S3 method.
+\code{problem}.This is a generic S3 method.
+}
+\details{
+If the \code{data} contains results for a single problem only, the argument
+\code{problem} can be omitted. If a \code{filter} is set, only those search
+names matching the given \link{regular expression} are returned (pattern
+matching is done with \code{\link{grep}}).
 }
 

@@ -173,14 +173,18 @@ getProblems.james <- function(data, filter){
 
 #' Get names of applied searches
 #' 
-#' Extracts the names of all searches that have been applied to the given
-#' \code{problem}. If a \code{filter} is set, only those search names matching
-#' the given \link{regular expression} are returned (pattern matching is done
-#' with \code{\link{grep}}). This is a generic S3 method.
+#' Extracts the names of all searches that have been applied to the given 
+#' \code{problem}.This is a generic S3 method.
+#' 
+#' If the \code{data} contains results for a single problem only, the argument 
+#' \code{problem} can be omitted. If a \code{filter} is set, only those search 
+#' names matching the given \link{regular expression} are returned (pattern 
+#' matching is done with \code{\link{grep}}).
 #' 
 #' @param data data object containing the analysis results
-#' @param problem name of the analyzed problem
-#' @param filter \link{regular expression} (optional). Only search names that
+#' @param problem name of the analyzed problem. Can be omitted if the 
+#'   \code{data} contains results for a single problem only.
+#' @param filter \link{regular expression} (optional). Only search names that 
 #'   match the given regex are returned, if any.
 #'   
 #' @return Vector of strings containing the names of all searches that have been
@@ -192,6 +196,10 @@ getSearches <- function(data, problem, filter){
 }
 #' @export
 getSearches.james <- function(data, problem, filter){
+  # fall back to single problem if no problem specified
+  if(missing(problem)){
+    problem <- getSingleProblem(data)
+  }
   # extract problem data
   problem.data <- data[[problem]]
   # check if data is available
@@ -214,9 +222,17 @@ getSearches.james <- function(data, problem, filter){
 #' \code{search} being applied to a specific \code{problem}. This is a generic 
 #' S3 method.
 #' 
+#' If the \code{data} contains results for a single problem only, the argument 
+#' \code{problem} can be omitted. Likewise, if -- for the considered
+#' \code{problem} -- results are available for a single search only, the
+#' argument \code{search} can be omitted.
+#' 
 #' @param data data object containing the analysis results
-#' @param problem name of the analyzed problem
-#' @param search name of the applied search
+#' @param problem name of the analyzed problem. Can be omitted if the 
+#'   \code{data} contains results for a single problem only.
+#' @param search name of the applied search. Can be omitted if the \code{data} 
+#'   contains results for a single search only (for the considered 
+#'   \code{problem}).
 #'   
 #' @return A list containing one element for each search run.
 #'   
@@ -243,6 +259,14 @@ getSearchRuns <- function(data, problem, search){
 }
 #' @export
 getSearchRuns.james <- function(data, problem, search){
+  # fall back to single problem if not specified
+  if(missing(problem)){
+    problem <- getSingleProblem(data)   
+  }
+  # fall back to single search for considered problem, if not specified
+  if(missing(search)){
+    search <- getSingleSearch(data, problem)
+  }
   # extract search runs
   runs <- data[[problem]][[search]]
   # check if data is available
@@ -260,9 +284,17 @@ getSearchRuns.james <- function(data, problem, search){
 #' Get the number of applied runs of the given \code{search} when solving the 
 #' given \code{problem}. This is a generic S3 method.
 #' 
+#' If the \code{data} contains results for a single problem only, the argument 
+#' \code{problem} can be omitted. Likewise, if -- for the considered 
+#' \code{problem} -- results are available for a single search only, the 
+#' argument \code{search} can be omitted.
+#' 
 #' @param data data object containing the analysis results
-#' @param problem name of the analyzed problem
-#' @param search name of the applied search
+#' @param problem name of the analyzed problem. Can be omitted if the 
+#'   \code{data} contains results for a single problem only.
+#' @param search name of the applied search. Can be omitted if the \code{data} 
+#'   contains results for a single search only (for the considered 
+#'   \code{problem}).
 #'   
 #' @return numeric: number of applied search runs
 #'   
@@ -285,9 +317,17 @@ getNumSearchRuns.james <- function(data, problem, search){
 #' \code{search} applied to the given \code{problem}. This is a generic S3 
 #' method.
 #' 
+#' If the \code{data} contains results for a single problem only, the argument 
+#' \code{problem} can be omitted. Likewise, if -- for the considered
+#' \code{problem} -- results are available for a single search only, the
+#' argument \code{search} can be omitted.
+#' 
 #' @param data data object containing the analysis results
-#' @param problem name of the analyzed problem
-#' @param search name of the applied search
+#' @param problem name of the analyzed problem. Can be omitted if the 
+#'   \code{data} contains results for a single problem only.
+#' @param search name of the applied search. Can be omitted if the \code{data} 
+#'   contains results for a single search only (for the considered 
+#'   \code{problem}).
 #'   
 #' @return Numeric vector containing the values of the best found solutions
 #'   during each run.
@@ -311,6 +351,11 @@ getBestSolutionValues.james <- function(data, problem, search){
 #' \code{search} applied to the given \code{problem}. This is a generic S3 
 #' method.
 #' 
+#' If the \code{data} contains results for a single problem only, the argument 
+#' \code{problem} can be omitted. Likewise, if -- for the considered
+#' \code{problem} -- results are available for a single search only, the
+#' argument \code{search} can be omitted.
+#' 
 #' When writing results obtained from the analysis tools in the JAMES extensions
 #' module to a JSON file, one should provide a JSON converter for the solution 
 #' type of the analyzed problems if it is desired that the actual best found 
@@ -321,8 +366,11 @@ getBestSolutionValues.james <- function(data, problem, search){
 #' is returned.
 #' 
 #' @param data data object containing the analysis results
-#' @param problem name of the analyzed problem
-#' @param search name of the applied search
+#' @param problem name of the analyzed problem. Can be omitted if the 
+#'   \code{data} contains results for a single problem only.
+#' @param search name of the applied search. Can be omitted if the \code{data} 
+#'   contains results for a single search only (for the considered 
+#'   \code{problem}).
 #'   
 #' @return List containing the best found solutions during each run. May contain
 #'   \code{NA} values.

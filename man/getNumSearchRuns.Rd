@@ -9,9 +9,12 @@ getNumSearchRuns(data, problem, search)
 \arguments{
 \item{data}{data object containing the analysis results}
 
-\item{problem}{name of the analyzed problem}
+\item{problem}{name of the analyzed problem. Can be omitted if the
+\code{data} contains results for a single problem only.}
 
-\item{search}{name of the applied search}
+\item{search}{name of the applied search. Can be omitted if the \code{data}
+  contains results for a single search only (for the considered
+  \code{problem}).}
 }
 \value{
 numeric: number of applied search runs
@@ -19,5 +22,11 @@ numeric: number of applied search runs
 \description{
 Get the number of applied runs of the given \code{search} when solving the
 given \code{problem}. This is a generic S3 method.
+}
+\details{
+If the \code{data} contains results for a single problem only, the argument
+\code{problem} can be omitted. Likewise, if -- for the considered
+\code{problem} -- results are available for a single search only, the
+argument \code{search} can be omitted.
 }
 
