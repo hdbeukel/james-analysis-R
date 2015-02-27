@@ -13,13 +13,18 @@ getProblems(data, filter)
   match the given regex are returned, if any.}
 }
 \value{
-Vector of strings containing the names of all analyzed problems that
-  occur in the given data and match the applied filter (if any).
+Sorted vector of strings containing the names of all analyzed
+  problems that occur in the given data and match the applied filter (if
+  any).
 }
 \description{
 Extracts the names of all problems for which analysis results are contained
-in the given data. If a \code{filter} is set, only those problem names
-matching the given \link{regular expression} are returned (pattern matching
-is done with \code{\link{grep}}). This is a generic S3 method.
+in the given data. This is a generic S3 method.
+}
+\details{
+Problem names are sorted using \link[naturalsort]{naturalsort}. If a
+\code{filter} is set, only those problem names matching the given
+\link{regular expression} are returned (pattern matching is done with
+\code{\link{grep}}).
 }
 

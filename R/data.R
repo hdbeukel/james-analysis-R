@@ -145,18 +145,23 @@ reduceJAMES.james <- function(data, problems = ".*", searches = ".*"){
 
 #' Get names of analyzed problems
 #' 
-#' Extracts the names of all problems for which analysis results are contained
-#' in the given data. If a \code{filter} is set, only those problem names
-#' matching the given \link{regular expression} are returned (pattern matching
-#' is done with \code{\link{grep}}). This is a generic S3 method.
+#' Extracts the names of all problems for which analysis results are contained 
+#' in the given data. This is a generic S3 method.
+#' 
+#' Problem names are sorted using \link[naturalsort]{naturalsort}. If a 
+#' \code{filter} is set, only those problem names matching the given 
+#' \link{regular expression} are returned (pattern matching is done with 
+#' \code{\link{grep}}).
 #' 
 #' @param data data object containing the analysis results
-#' @param filter \link{regular expression} (optional). Only problem names that
+#' @param filter \link{regular expression} (optional). Only problem names that 
 #'   match the given regex are returned, if any.
 #'   
-#' @return Vector of strings containing the names of all analyzed problems that
-#'   occur in the given data and match the applied filter (if any).
+#' @return Sorted vector of strings containing the names of all analyzed
+#'   problems that occur in the given data and match the applied filter (if
+#'   any).
 #'   
+#' @importFrom naturalsort naturalsort
 #' @export
 getProblems <- function(data, filter){
   UseMethod("getProblems")
@@ -168,6 +173,8 @@ getProblems.james <- function(data, filter){
   if(!missing(filter)){
     problem.names <- grep(pattern = filter, problem.names, value = TRUE)
   }
+  # sort
+  problem.names <- naturalsort::naturalsort(problem.names)
   return(problem.names)
 }
 
@@ -176,7 +183,8 @@ getProblems.james <- function(data, filter){
 #' Extracts the names of all searches that have been applied to the given 
 #' \code{problem}.This is a generic S3 method.
 #' 
-#' If the \code{data} contains results for a single problem only, the argument 
+#' Search names are sorted using \link[naturalsort]{naturalsort}. If the
+#' \code{data} contains results for a single problem only, the argument 
 #' \code{problem} can be omitted. If a \code{filter} is set, only those search 
 #' names matching the given \link{regular expression} are returned (pattern 
 #' matching is done with \code{\link{grep}}).
@@ -187,9 +195,11 @@ getProblems.james <- function(data, filter){
 #' @param filter \link{regular expression} (optional). Only search names that 
 #'   match the given regex are returned, if any.
 #'   
-#' @return Vector of strings containing the names of all searches that have been
-#'   applied to the given problem and match the applied filter (if any).
+#' @return Sorted vector of strings containing the names of all searches that
+#'   have been applied to the given problem and match the applied filter (if
+#'   any).
 #'   
+#' @importFrom naturalsort naturalsort
 #' @export
 getSearches <- function(data, problem, filter){
   UseMethod("getSearches")
@@ -213,6 +223,8 @@ getSearches.james <- function(data, problem, filter){
   if(!missing(filter)){
     search.names <- grep(pattern = filter, search.names, value = TRUE);
   }
+  # sort
+  search.names <- naturalsort::naturalsort(search.names)
   return(search.names)
 }
 

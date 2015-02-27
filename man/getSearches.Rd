@@ -16,15 +16,17 @@ getSearches(data, problem, filter)
   match the given regex are returned, if any.}
 }
 \value{
-Vector of strings containing the names of all searches that have been
-  applied to the given problem and match the applied filter (if any).
+Sorted vector of strings containing the names of all searches that
+  have been applied to the given problem and match the applied filter (if
+  any).
 }
 \description{
 Extracts the names of all searches that have been applied to the given
 \code{problem}.This is a generic S3 method.
 }
 \details{
-If the \code{data} contains results for a single problem only, the argument
+Search names are sorted using \link[naturalsort]{naturalsort}. If the
+\code{data} contains results for a single problem only, the argument
 \code{problem} can be omitted. If a \code{filter} is set, only those search
 names matching the given \link{regular expression} are returned (pattern
 matching is done with \code{\link{grep}}).

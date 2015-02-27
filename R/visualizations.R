@@ -54,7 +54,6 @@
 #'   \code{\link{getSearches}} on the given \code{data} and \code{problem}.
 #' @param ... optional other arguments passed to \code{\link{matplot}}.
 #'  
-#' @importFrom naturalsort naturalsort
 #' @export
 plotConvergence <- function(data, problem, col = "black", type = "s", lty = NULL,
                             title = "Convergence curve(s)", xlab = "Runtime (ms)",
@@ -95,7 +94,7 @@ plotConvergence.james <- function(data, problem, col = "black", type = "s", lty 
   }
   
   # get names of applied searches (sorted in natural order)
-  searches <- naturalsort::naturalsort(getSearches(data, problem))
+  searches <- getSearches(data, problem)
   num.searches <- length(searches)
   # average runs for each search
   avg.curves <- list()
