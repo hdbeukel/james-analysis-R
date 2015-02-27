@@ -19,7 +19,8 @@ if the \code{data} contains results for a single problem only.}
 \item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
 providing a vector. Defaults to black.}
 
-\item{type}{plot type, defaults to staircase.}
+\item{type}{plot type, defaults to staircase. See \link{matplot} and
+\link{plot} for more information about the possible plot types.}
 
 \item{lty}{line type(s), used cyclically when providing a vector. If set to
 \code{NULL}, line types default to 1:n where n is the number of plotted
@@ -74,5 +75,7 @@ default, a legend is added to the plot. This can be omitted by setting
 \code{legend = FALSE}. If desired, a custom legend may then be added. It is
 possible to zoom in on a specific region of the plot using the parameters
 \code{min.time} and \code{max.time}.
+
+Any additional parameters are passed to \link{matplot}.
 }
 
