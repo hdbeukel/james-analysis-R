@@ -13,20 +13,28 @@
 #' respective data.
 #' 
 #' The curves are plotted using \link{matplot}. More information about the 
-#' graphical parameters are provided in the documentation of this function.
+#' graphical parameters are provided in the documentation of this function. By 
+#' default, a legend is added to the plot. This can be omitted by setting 
+#' \code{legend = FALSE}. If desired, a custom legend may then be added. It is
+#' possible to zoom in on a specific region of the plot using the parameters
+#' \code{min.time} and \code{max.time}.
 #' 
 #' @param data data object containing the analysis results
 #' @param problem name of the problem for which the plot is made. Can be omitted
 #'   if the \code{data} contains results for a single problem only.
 #' @param col color(s) of the plotted lines and/or symbols, used cyclically when
 #'   providing a vector. Defaults to black.
-#' @param type plot type, defaults to lines.
+#' @param type plot type, defaults to staircase.
 #' @param lty line type(s), used cyclically when providing a vector. If set to 
 #'   \code{NULL}, line types default to 1:n where n is the number of plotted 
 #'   curves.
 #' @param title plot title.
 #' @param xlab x-axis label.
 #' @param ylab y-axis label.
+#' @param min.time zoom in on the part of the curve(s) above this time on the 
+#'   \code{x-}axis. Defaults to NA in which case no minimum time is set.
+#' @param max.time zoom in on the part of the curve(s) below this time on the 
+#'   \code{x-}axis. Defaults to NA in which case no maximum time is set.
 #' @param legend logical: indicates whether a legend should be added to the 
 #'   plot. Defaults to TRUE.
 #' @param legend.pos position of the legend, specified as a keyword  keyword 
@@ -39,22 +47,24 @@
 #'   two values are given, the first is used for \code{x-}distance, the second 
 #'   for \code{y-}distance.
 #' @param legend.names names to be shown in the legend. If set to \code{NULL}, 
-#'   the names default to the search names obtained from calling
+#'   the names default to the search names obtained from calling 
 #'   \code{\link{getSearches}} on the given \code{data} and \code{problem}.
 #' @param ... optional other arguments passed to \code{\link{matplot}}.
 #'   
 #' @export
-plotConvergence <- function(data, problem, col = "black", type = "l", lty = NULL,
+plotConvergence <- function(data, problem, col = "black", type = "s", lty = NULL,
                             title = "Convergence curve(s)", xlab = "Runtime (ms)",
-                            ylab = "Value", legend = TRUE, legend.pos = "bottomright",
+                            ylab = "Value", min.time = NA, max.time = NA,
+                            legend = TRUE, legend.pos = "bottomright",
                             legend.inset = c(0.02, 0.05), legend.names = NULL,
                             ...){
   UseMethod("plotConvergence")
 }
 #' @export
-plotConvergence.james <- function(data, problem, col = "black", type = "l", lty = NULL,
+plotConvergence.james <- function(data, problem, col = "black", type = "s", lty = NULL,
                                   title = "Convergence curve(s)", xlab = "Runtime (ms)",
-                                  ylab = "Value", legend = TRUE, legend.pos = "bottomright",
+                                  ylab = "Value", min.time = NA, max.time = NA,
+                                  legend = TRUE, legend.pos = "bottomright",
                                   legend.inset = c(0.02, 0.05), legend.names = NULL,
                                   ...){
   # check input - fall back to only problem if applicable
@@ -67,89 +77,62 @@ plotConvergence.james <- function(data, problem, col = "black", type = "l", lty 
       problem <- all.problems[1]
     }
   }
+  
   # get names of applied searches
   searches <- getSearches(data, problem)
-  # average runs for each search
-  avg.curves <- list()
-  for(search in searches){
-    # extract search runs
+  num.searches <- length(searches)
+  # extract min and max time across all runs of all searches
+  observed.time.bounds.per.search <- lapply(searches, function(search){
     runs <- getSearchRuns(data, problem, search)
-    # reduce runs to max value at same time
-    runs <- lapply(runs, function(run){
-      reduced.times <- unique(run$times)
-      reduced.values <- sapply(reduced.times, function(t){
-        max(run$values[run$times == t])
+    obs.min <- min(sapply(runs, function(run){min(run$times)}))
+    obs.max <- max(sapply(runs, function(run){max(run$times)}))
+    return(c(obs.min, obs.max))
+  })
+  observed.time.bounds <- c(
+    min(sapply(observed.time.bounds.per.search, function(s){s[1]})),
+    max(sapply(observed.time.bounds.per.search, function(s){s[2]}))
+  )
+  
+  # initialize time points and value matrix
+  plotted.time.bounds <- observed.time.bounds
+  if(!is.na(min.time)){
+    plotted.time.bounds[1] <- max(plotted.time.bounds[1], min.time)
+  }
+  if(!is.na(max.time)){
+    plotted.time.bounds[2] <- min(plotted.time.bounds[2], max.time)
+  }
+  time.points <- seq(plotted.time.bounds[1], plotted.time.bounds[2])
+  num.points <- length(time.points)
+  values.matrix <- matrix(NA, nrow = num.points, ncol = num.searches)
+  
+  # fill value matrix
+  for(s in 1:num.searches){
+    # extract search runs
+    search <- searches[s]
+    runs <- getSearchRuns(data, problem, search)
+    # map time points on average value across runs
+    avg.values <- sapply(time.points, function(t){
+      # get last observed value per run at or before time point t
+      run.values <- sapply(runs, function(run){
+        obs.values <- run$values[run$time <= t]
+        last.obs.value <- ifelse(length(obs.values) > 0, tail(obs.values, 1), NA)
+        return(last.obs.value)
       })
-      run$times <- reduced.times
-      run$values <- reduced.values
-      return(run)
+      # average run values
+      run.values <- run.values[!is.na(run.values)]
+      avg.value <- ifelse(length(run.values) > 0, mean(run.values), NA)
+      return(avg.value)
     })
-    # average runs
-    n.runs <- length(runs)
-    runs.cur.indices <- rep(1, n.runs)
-    runs.last.indices <- sapply(runs, function(run){length(run$times)})
-    runs.cur.values <- sapply(runs, function(run){run$values[1]})
-    avg.times <- c()
-    avg.values <- c()
-    while(max(runs.last.indices - runs.cur.indices) >= 0){
-      # calculate first point in time when a new value is reached in any run
-      next.times <- sapply(1:n.runs, function(r){
-        run <- runs[[r]]
-        cur.index <- runs.cur.indices[r]
-        return(run$times[cur.index])
-      })
-      min.t <- min(next.times, na.rm = TRUE)
-      # gather indices of runs with an update
-      updated.runs.indices <- sapply(1:n.runs, function(r){
-        run <- runs[[r]]
-        cur.index <- runs.cur.indices[r]
-        t <- run$times[cur.index]
-        return(ifelse(!is.na(t) && t == min.t, r, NA))
-      })
-      updated.runs.indices <- updated.runs.indices[!is.na(updated.runs.indices)]
-      # extract new values for updated runs
-      updated.runs.values <- sapply(updated.runs.indices, function(r){
-        run <- runs[[r]]
-        cur.index <- runs.cur.indices[r]
-        return(run$values[cur.index])
-      })
-      # update values
-      runs.cur.values[updated.runs.indices] <- updated.runs.values
-      # increase current indices of updated runs
-      runs.cur.indices[updated.runs.indices] <- runs.cur.indices[updated.runs.indices] + 1
-      # register averaged value and corresponding time
-      avg.times <- c(avg.times, min.t)
-      avg.values <- c(avg.values, mean(runs.cur.values))
-    }
-    
-    # register averaged curve
-    avg.curve <- list(times = avg.times, values = avg.values)
-    avg.curves <- append(avg.curves, list(avg.curve))
-    
+    # store in matrix
+    values.matrix[ , s] <- avg.values
   }
-  
-  # extract number of curves and maximum number of data points across all curves
-  num.curves <- length(avg.curves)
-  max.num.points <- max(sapply(avg.curves, function(curve){length(curve$times)}))
-  # initialize matrix of time vectors (columns)
-  times.matrix <- matrix(NA, nrow = max.num.points, ncol = num.curves)
-  # initialize matrix of value vectors (columns)
-  values.matrix <- matrix(NA, nrow = max.num.points, ncol = num.curves)
-  
-  # fill both matrices
-  for(i in 1:num.curves){
-    curve <- avg.curves[[i]]
-    num.points <- length(curve$times)
-    times.matrix[1:num.points, i] <- curve$times
-    values.matrix[1:num.points, i] <- curve$values
-  }
-  
+
   # set default line types
   if(is.null(lty)){
-    lty <- 1:num.curves
+    lty <- 1:num.searches
   }
   # plot curves
-  matplot(x = times.matrix, y = values.matrix,
+  matplot(x = time.points, y = values.matrix,
           col = col, type = type, lty = lty,
           main = title, xlab = xlab, ylab = ylab,
           ...)

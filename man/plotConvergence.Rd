@@ -4,9 +4,10 @@
 \alias{plotConvergence}
 \title{Plot convergence curves}
 \usage{
-plotConvergence(data, problem, col = "black", type = "l", lty = NULL,
+plotConvergence(data, problem, col = "black", type = "s", lty = NULL,
   title = "Convergence curve(s)", xlab = "Runtime (ms)", ylab = "Value",
-  legend = TRUE, legend.pos = "bottomright", legend.inset = c(0.02, 0.05),
+  min.time = NA, max.time = NA, legend = TRUE,
+  legend.pos = "bottomright", legend.inset = c(0.02, 0.05),
   legend.names = NULL, ...)
 }
 \arguments{
@@ -18,7 +19,7 @@ if the \code{data} contains results for a single problem only.}
 \item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
 providing a vector. Defaults to black.}
 
-\item{type}{plot type, defaults to lines.}
+\item{type}{plot type, defaults to staircase.}
 
 \item{lty}{line type(s), used cyclically when providing a vector. If set to
 \code{NULL}, line types default to 1:n where n is the number of plotted
@@ -29,6 +30,12 @@ curves.}
 \item{xlab}{x-axis label.}
 
 \item{ylab}{y-axis label.}
+
+\item{min.time}{zoom in on the part of the curve(s) above this time on the
+\code{x-}axis. Defaults to NA in which case no minimum time is set.}
+
+\item{max.time}{zoom in on the part of the curve(s) below this time on the
+\code{x-}axis. Defaults to NA in which case no maximum time is set.}
 
 \item{legend}{logical: indicates whether a legend should be added to the
 plot. Defaults to TRUE.}
@@ -62,6 +69,10 @@ selection of the applied searches, use \link{reduceJAMES} to extract the
 respective data.
 
 The curves are plotted using \link{matplot}. More information about the
-graphical parameters are provided in the documentation of this function.
+graphical parameters are provided in the documentation of this function. By
+default, a legend is added to the plot. This can be omitted by setting
+\code{legend = FALSE}. If desired, a custom legend may then be added. It is
+possible to zoom in on a specific region of the plot using the parameters
+\code{min.time} and \code{max.time}.
 }
 
