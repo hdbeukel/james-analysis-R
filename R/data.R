@@ -14,7 +14,7 @@
 #'   
 #' @examples
 #' # get path to raw JSON file included in package distribution
-#' json.file <- system.file("extdata", "data.json", package = "james.analysis")
+#' json.file <- system.file("extdata", "AlgoComparison.json", package = "james.analysis")
 #' 
 #' # read results from file
 #' data <- readJAMES(json.file)
@@ -303,6 +303,43 @@ getBestSolutionValues.james <- function(data, problem, search){
   # get best solution values
   best.solution.values <- sapply(runs, function(run){ tail(run$values, n=1) })
   return(best.solution.values)
+}
+
+#' Get best found solutions
+#' 
+#' Get the best found solutions during the different runs of the given 
+#' \code{search} applied to the given \code{problem}. This is a generic S3 
+#' method.
+#' 
+#' When writing results obtained from the analysis tools in the JAMES extensions
+#' module to a JSON file, one should provide a JSON converter for the solution 
+#' type of the analyzed problems if it is desired that the actual best found 
+#' solutions are contained in the output file. Therefore, these solutions might 
+#' not be available for all problems, searches or search runs. In case a best 
+#' solution is missing for a search run, the corresponding entry in the returned 
+#' list will be set to \code{NA}. It is possible that a list of only \code{NA}
+#' is returned.
+#' 
+#' @param data data object containing the analysis results
+#' @param problem name of the analyzed problem
+#' @param search name of the applied search
+#'   
+#' @return List containing the best found solutions during each run. May contain
+#'   \code{NA} values.
+#'   
+#' @export
+getBestSolutions <- function(data, problem, search){
+  UseMethod("getBestSolutions")
+}
+#' @export
+getBestSolutions.james <- function(data, problem, search){
+  # extract search runs
+  runs <- getSearchRuns(data, problem, search)
+  # get best solutions
+  best.solutions <- lapply(runs, function(run){ run$best.solution })
+  # replace NULL with NA
+  best.solutions[sapply(best.solutions, is.null)] <- NA
+  return(best.solutions)
 }
 
 ################################## SUMMARY ################################## 
