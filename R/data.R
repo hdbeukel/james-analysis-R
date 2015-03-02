@@ -410,24 +410,25 @@ summary.james <- function(object, ...){
   results <- object
   
   # determine column widths
-  col.widths <- c(8, 7, 5, 11, 8)
+  col.widths <- c(8, 7, 5, 11, 8, 8, 8)
   problem.names <- getProblems(results)
   search.names <- unique(unlist(sapply(problem.names, function(p){getSearches(results, p)})))
   col.widths[1] <- max(col.widths[1], max(sapply(problem.names, nchar)))
   col.widths[2] <- max(col.widths[2], max(sapply(search.names, nchar)))
-  format <- sprintf("%%-%ds  %%-%ds  %%%ds  %%%ds  %%%ds \n",
+  format <- sprintf("%%-%ds  %%-%ds  %%%ds  %%%ds  %%%ds  %%%ds  %%%ds\n",
                     col.widths[1], col.widths[2], col.widths[3],
-                    col.widths[4], col.widths[5])
+                    col.widths[4], col.widths[5], col.widths[6],
+                    col.widths[7])
   
   # construct header lines
   lines <- lapply(col.widths, function(w){ paste(rep("-", w), collapse = "") })
   
   # print header
-  printf(format, "Problem:", "Search:", "Runs:", "Mean value:", "St. dev:")
-  printf(format, lines[[1]], lines[[2]], lines[[3]], lines[[4]], lines[[5]])
+  printf(format, "Problem:", "Search:", "Runs:", "Mean value:", "St. dev:", "Median:", "IQR:")
+  printf(format, lines[[1]], lines[[2]], lines[[3]], lines[[4]], lines[[5]], lines[[6]], lines[[7]])
   
   # update format for real value printing (last two columns)
-  format <- sprintf("%%-%ds  %%-%ds  %%%ds  %%11.3g  %%8.3g \n",
+  format <- sprintf("%%-%ds  %%-%ds  %%%ds  %%11.3g  %%8.3g  %%8.3g  %%8.3g\n",
                     col.widths[1], col.widths[2], col.widths[3])
   
   # print info of applied searches per problem
@@ -438,7 +439,9 @@ summary.james <- function(object, ...){
       values <- getBestSolutionValues(results, problem, search)
       mean.value <- mean(values)
       sd.value <- sd(values)
-      printf(format, problem, search, nruns, mean.value, sd.value)
+      median.value <- median(values)
+      iqr.value <- IQR(values)
+      printf(format, problem, search, nruns, mean.value, sd.value, median.value, iqr.value)
     }
   }
   
