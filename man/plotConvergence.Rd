@@ -4,10 +4,10 @@
 \alias{plotConvergence}
 \title{Plot convergence curves}
 \usage{
-plotConvergence(data, problem, col = "black", type = "s", lty = NULL,
-  title = "Convergence curve(s)", xlab = "Runtime (ms)", ylab = "Value",
-  min.time = NA, max.time = NA, legend = TRUE,
-  legend.pos = "bottomright", legend.inset = c(0.02, 0.05),
+plotConvergence(data, problem, method = c("mean", "median"), col = "black",
+  type = "s", lty = NULL, title = "Convergence curve(s)",
+  xlab = "Runtime (ms)", ylab = "Value", min.time = NA, max.time = NA,
+  legend = TRUE, legend.pos = "bottomright", legend.inset = c(0.02, 0.05),
   legend.names = NULL, ...)
 }
 \arguments{
@@ -15,6 +15,9 @@ plotConvergence(data, problem, col = "black", type = "s", lty = NULL,
 
 \item{problem}{name of the problem for which the plot is made. Can be omitted
 if the \code{data} contains results for a single problem only.}
+
+\item{method}{one of "mean" (default) or "median". Determines how the values
+from the different search runs are aggregated.}
 
 \item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
 providing a vector. Defaults to black.}
@@ -60,8 +63,8 @@ the names default to the search names obtained from calling
 }
 \description{
 Creates a plot showing the convergence curve of each search that has been
-applied to the given \code{problem}, averaged over all search runs. This is a
-generic S3 method.
+applied to the given \code{problem}, aggregated over all search runs (mean or
+median). This is a generic S3 method.
 }
 \details{
 If the \code{data} contains results for a single problem only, the argument

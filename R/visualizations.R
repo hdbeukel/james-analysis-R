@@ -4,8 +4,8 @@
 #' Plot convergence curves
 #' 
 #' Creates a plot showing the convergence curve of each search that has been 
-#' applied to the given \code{problem}, averaged over all search runs. This is a
-#' generic S3 method.
+#' applied to the given \code{problem}, aggregated over all search runs (mean or
+#' median). This is a generic S3 method.
 #' 
 #' If the \code{data} contains results for a single problem only, the argument 
 #' \code{problem} can be omitted. If desired to plot convergence curves for a 
@@ -24,9 +24,11 @@
 #' @param data data object containing the analysis results
 #' @param problem name of the problem for which the plot is made. Can be omitted
 #'   if the \code{data} contains results for a single problem only.
+#' @param method one of "mean" (default) or "median". Determines how the values 
+#'   from the different search runs are aggregated.
 #' @param col color(s) of the plotted lines and/or symbols, used cyclically when
 #'   providing a vector. Defaults to black.
-#' @param type plot type, defaults to staircase. See \link{matplot} and
+#' @param type plot type, defaults to staircase. See \link{matplot} and 
 #'   \link{plot} for more information about the possible plot types.
 #' @param lty line type(s), used cyclically when providing a vector. If set to 
 #'   \code{NULL}, line types default to 1:n where n is the number of plotted 
@@ -53,9 +55,10 @@
 #'   the names default to the search names obtained from calling 
 #'   \code{\link{getSearches}} on the given \code{data} and \code{problem}.
 #' @param ... optional other arguments passed to \code{\link{matplot}}.
-#'  
+#'   
 #' @export
-plotConvergence <- function(data, problem, col = "black", type = "s", lty = NULL,
+plotConvergence <- function(data, problem, method = c("mean", "median"),
+                            col = "black", type = "s", lty = NULL,
                             title = "Convergence curve(s)", xlab = "Runtime (ms)",
                             ylab = "Value", min.time = NA, max.time = NA,
                             legend = TRUE, legend.pos = "bottomright",
@@ -64,22 +67,16 @@ plotConvergence <- function(data, problem, col = "black", type = "s", lty = NULL
   UseMethod("plotConvergence")
 }
 #' @export
-plotConvergence.james <- function(data, problem, col = "black", type = "s", lty = NULL,
+plotConvergence.james <- function(data, problem, method = c("mean", "median"),
+                                  col = "black", type = "s", lty = NULL,
                                   title = "Convergence curve(s)", xlab = "Runtime (ms)",
                                   ylab = "Value", min.time = NA, max.time = NA,
                                   legend = TRUE, legend.pos = "bottomright",
                                   legend.inset = c(0.02, 0.05), legend.names = NULL,
                                   ...){
-  # check input - fall back to only problem if applicable
-  all.problems <- getProblems(data)
-  if(missing(problem)){
-    if(length(all.problems) > 1){
-      stop("'data' contains more than one problem, please specify 'problem'")
-    } else {
-      # set name of only problem
-      problem <- all.problems[1]
-    }
-  }
+  # check input
+  method <- get(match.arg(method))
+  
   if(!is.na(min.time) && !is.numeric(min.time)){
     stop("'min.time' should be \"numeric\"")
   }
@@ -96,8 +93,8 @@ plotConvergence.james <- function(data, problem, col = "black", type = "s", lty 
   # get names of applied searches (sorted in natural order)
   searches <- getSearches(data, problem)
   num.searches <- length(searches)
-  # average runs for each search
-  avg.curves <- list()
+  # aggregate runs for each search
+  agg.curves <- list()
   for(search in searches){
     # extract search runs
     runs <- getSearchRuns(data, problem, search)
@@ -111,13 +108,13 @@ plotConvergence.james <- function(data, problem, col = "black", type = "s", lty 
       run$values <- reduced.values
       return(run)
     })
-    # average runs
+    # aggregate runs
     n.runs <- length(runs)
     runs.cur.indices <- rep(1, n.runs)
     runs.last.indices <- sapply(runs, function(run){length(run$times)})
     runs.cur.values <- sapply(runs, function(run){run$values[1]})
-    avg.times <- c()
-    avg.values <- c()
+    agg.times <- c()
+    agg.values <- c()
     while(max(runs.last.indices - runs.cur.indices) >= 0){
       # calculate first point in time when a new value is reached in any run
       next.times <- sapply(1:n.runs, function(r){
@@ -144,46 +141,46 @@ plotConvergence.james <- function(data, problem, col = "black", type = "s", lty 
       runs.cur.values[updated.runs.indices] <- updated.runs.values
       # increase current indices of updated runs
       runs.cur.indices[updated.runs.indices] <- runs.cur.indices[updated.runs.indices] + 1
-      # register averaged value and corresponding time
-      avg.times <- c(avg.times, min.t)
-      avg.values <- c(avg.values, mean(runs.cur.values))
+      # register aggregated value and corresponding time
+      agg.times <- c(agg.times, min.t)
+      agg.values <- c(agg.values, method(runs.cur.values))
     }
     
     # zoom in on specific time interval, if desired
     if(!is.na(min.time)){
       # save values before minimum time
-      pre <- avg.values[avg.times < min.time]
+      pre <- agg.values[agg.times < min.time]
       # truncate
-      avg.values <- avg.values[avg.times >= min.time]
-      avg.times <- avg.times[avg.times >= min.time]
+      agg.values <- agg.values[agg.times >= min.time]
+      agg.times <- agg.times[agg.times >= min.time]
       # prepend start value, if available
       if(length(pre) > 0){
-        avg.values <- c(tail(pre, 1), avg.values)
-        avg.times <- c(min.time, avg.times)
+        agg.values <- c(tail(pre, 1), agg.values)
+        agg.times <- c(min.time, agg.times)
       }
     }
     if(!is.na(max.time)){
       # save values after maximum time
-      post <- avg.values[avg.times > max.time]
+      post <- agg.values[agg.times > max.time]
       # truncate
-      avg.values <- avg.values[avg.times <= max.time]
-      avg.times <- avg.times[avg.times <= max.time]
+      agg.values <- agg.values[agg.times <= max.time]
+      agg.times <- agg.times[agg.times <= max.time]
       # append final value, if available
       if(length(post) > 0){
-        avg.values <- c(avg.values, head(post, 1))
-        avg.times <- c(avg.times, max.time)
+        agg.values <- c(agg.values, head(post, 1))
+        agg.times <- c(agg.times, max.time)
       }
     }
     
-    # register averaged curve
-    avg.curve <- list(times = avg.times, values = avg.values)
-    avg.curves <- append(avg.curves, list(avg.curve))
+    # register aggregated curve
+    avg.curve <- list(times = agg.times, values = agg.values)
+    agg.curves <- append(agg.curves, list(avg.curve))
     
   }
   
   # extract maximum number of data points and final time point (across all curves)
-  max.num.points <- max(sapply(avg.curves, function(curve){length(curve$times)}))
-  final.time.point <- max(sapply(avg.curves, function(curve){tail(curve$times, 1)}))
+  max.num.points <- max(sapply(agg.curves, function(curve){length(curve$times)}))
+  final.time.point <- max(sapply(agg.curves, function(curve){tail(curve$times, 1)}))
   # initialize matrix of time vectors (columns)
   times.matrix <- matrix(NA, nrow = max.num.points, ncol = num.searches)
   # initialize matrix of value vectors (columns)
@@ -191,7 +188,7 @@ plotConvergence.james <- function(data, problem, col = "black", type = "s", lty 
   
   # fill both matrices
   for(i in 1:num.searches){
-    curve <- avg.curves[[i]]
+    curve <- agg.curves[[i]]
     num.points <- length(curve$times)
     times.matrix[1:num.points, i] <- curve$times
     values.matrix[1:num.points, i] <- curve$values
