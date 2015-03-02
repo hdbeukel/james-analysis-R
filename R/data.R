@@ -161,7 +161,6 @@ reduceJAMES.james <- function(data, problems = ".*", searches = ".*"){
 #'   problems that occur in the given data and match the applied filter (if
 #'   any).
 #'   
-#' @importFrom naturalsort naturalsort
 #' @export
 getProblems <- function(data, filter){
   UseMethod("getProblems")
@@ -199,7 +198,6 @@ getProblems.james <- function(data, filter){
 #'   have been applied to the given problem and match the applied filter (if
 #'   any).
 #'   
-#' @importFrom naturalsort naturalsort
 #' @export
 getSearches <- function(data, problem, filter){
   UseMethod("getSearches")
