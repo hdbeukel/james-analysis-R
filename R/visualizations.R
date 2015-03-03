@@ -24,11 +24,11 @@
 #' @param data data object containing the analysis results
 #' @param problem name of the problem for which the plot is made. Can be omitted
 #'   if the \code{data} contains results for a single problem only.
-#' @param method one of "mean" (default) or "median". Determines how the values 
+#' @param type one of "mean" (default) or "median". Determines how the values 
 #'   from the different search runs are aggregated.
 #' @param col color(s) of the plotted lines and/or symbols, used cyclically when
 #'   providing a vector. Defaults to black.
-#' @param type plot type, defaults to staircase. See \link{matplot} and 
+#' @param plot.type defaults to "s" (staircase). See \link{matplot} and 
 #'   \link{plot} for more information about the possible plot types.
 #' @param lty line type(s), used cyclically when providing a vector. If set to 
 #'   \code{NULL}, line types default to 1:n where n is the number of plotted 
@@ -45,8 +45,9 @@
 #' @param legend.pos position of the legend, specified as a keyword  keyword 
 #'   from the list \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, 
 #'   \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, 
-#'   \code{"right"} and \code{"center"}. Defaults to \code{"bottomright"} as 
-#'   this area of the plot usually has a lot of available space.
+#'   \code{"right"} and \code{"center"}. If set to \code{NULL}, defaults to 
+#'   \code{"bottomright"} in case values are being maximized or 
+#'   \code{"topright"} in case of minimization.
 #' @param legend.inset inset distance(s) from the margins as a fraction of the 
 #'   plot region. If a single value is given, it is used for both margins; if 
 #'   two values are given, the first is used for \code{x-}distance, the second 
@@ -57,25 +58,25 @@
 #' @param ... optional other arguments passed to \code{\link{matplot}}.
 #'   
 #' @export
-plotConvergence <- function(data, problem, method = c("mean", "median"),
-                            col = "black", type = "s", lty = NULL,
+plotConvergence <- function(data, problem, type = c("mean", "median"),
+                            col = "black", plot.type = "s", lty = NULL,
                             title = "Convergence curve(s)", xlab = "Runtime (ms)",
                             ylab = "Value", min.time = NA, max.time = NA,
-                            legend = TRUE, legend.pos = "bottomright",
+                            legend = TRUE, legend.pos = NULL,
                             legend.inset = c(0.02, 0.05), legend.names = NULL,
                             ...){
   UseMethod("plotConvergence")
 }
 #' @export
-plotConvergence.james <- function(data, problem, method = c("mean", "median"),
-                                  col = "black", type = "s", lty = NULL,
+plotConvergence.james <- function(data, problem, type = c("mean", "median"),
+                                  col = "black", plot.type = "s", lty = NULL,
                                   title = "Convergence curve(s)", xlab = "Runtime (ms)",
                                   ylab = "Value", min.time = NA, max.time = NA,
-                                  legend = TRUE, legend.pos = "bottomright",
+                                  legend = TRUE, legend.pos = NULL,
                                   legend.inset = c(0.02, 0.05), legend.names = NULL,
                                   ...){
   # check input
-  method <- get(match.arg(method))
+  agg.function <- get(match.arg(type))
   
   if(!is.na(min.time) && !is.numeric(min.time)){
     stop("'min.time' should be \"numeric\"")
@@ -143,7 +144,7 @@ plotConvergence.james <- function(data, problem, method = c("mean", "median"),
       runs.cur.indices[updated.runs.indices] <- runs.cur.indices[updated.runs.indices] + 1
       # register aggregated value and corresponding time
       agg.times <- c(agg.times, min.t)
-      agg.values <- c(agg.values, method(runs.cur.values))
+      agg.values <- c(agg.values, agg.function(runs.cur.values))
     }
     
     # zoom in on specific time interval, if desired
@@ -205,11 +206,15 @@ plotConvergence.james <- function(data, problem, method = c("mean", "median"),
   }
   # plot curves
   matplot(x = times.matrix, y = values.matrix,
-          col = col, type = type, lty = lty,
+          col = col, type = plot.type, lty = lty,
           main = title, xlab = xlab, ylab = ylab,
           ...)
   if(legend){
-    # set default legend names
+    # set default position if not specified
+    if(is.null(legend.pos)){
+      legend.pos <- ifelse(isMinimizing(data, problem), "topright", "bottomright")
+    }
+    # set default legend names if not specified
     if(is.null(legend.names)){
       legend.names = searches
     }
@@ -220,9 +225,53 @@ plotConvergence.james <- function(data, problem, method = c("mean", "median"),
   
 }
 
+################################## BOX PLOTS ##################################
 
-
-
+# #' Solution quality and convergence time box plots
+# #' 
+# #' Produce box-and-whisker plots for the searches that have been applied to the 
+# #' given problem, visualizing the distribution of the best found solution's 
+# #' value (solution quality) or the time until a certain ratio of this value has 
+# #' been reached (convergence time) in subsequent search runs.
+# #' 
+# #' If the data \code{x} contains results for a single problem only, the argument
+# #' \code{problem} can be omitted. If desired to produce box plots for a 
+# #' selection of the applied searches, use \link{reduceJAMES} to extract the 
+# #' respective data.
+# #' 
+# #' The plots are made using the generic \link{boxplot} method called on a list 
+# #' of vectors containing the distribution samples for each search.
+# #' 
+# #' Any additional parameters are passed to \link{boxplot}.
+# #' 
+# #' @param x data object containing the analysis results
+# #' @param problem name of the problem for which the plot is made. Can be omitted
+# #'   if the data \code{x} contains results for a single problem only.
+# #' @param type one of "quality" (default) or "time". In both cases, box plots 
+# #'   are produced to visualize the distribution of a certain metric calculated 
+# #'   from the results obtained in the different runs of each search. If set to 
+# #'   "quality", the final solution's value is reported; if set to "time", the 
+# #'   time until a certain ratio (see parameter \code{conv.ratio}) of this value 
+# #'   has been reached is shown.
+# #' @param conv.ratio only used if \code{type} is \code{"time"}. At the time when
+# #'   the given ratio of the final best found solution's value has been obtained,
+# #'   the search process is said to have converged.
+# #'   
+# #' @importFrom graphics boxplot
+# #' @export
+# boxplot.james <- function(x, problem, type = c("quality", "time"),
+#                           conv.ratio = 0.99, title = NULL, ylab = NULL,
+#                           ...){
+#   
+#   # rename data object
+#   data <- x
+#   
+#   # ...
+#   
+#   # get searches
+#   searches <- getSearches(data, problem)
+# 
+# }
 
 
 

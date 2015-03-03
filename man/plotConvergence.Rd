@@ -4,10 +4,10 @@
 \alias{plotConvergence}
 \title{Plot convergence curves}
 \usage{
-plotConvergence(data, problem, method = c("mean", "median"), col = "black",
-  type = "s", lty = NULL, title = "Convergence curve(s)",
+plotConvergence(data, problem, type = c("mean", "median"), col = "black",
+  plot.type = "s", lty = NULL, title = "Convergence curve(s)",
   xlab = "Runtime (ms)", ylab = "Value", min.time = NA, max.time = NA,
-  legend = TRUE, legend.pos = "bottomright", legend.inset = c(0.02, 0.05),
+  legend = TRUE, legend.pos = NULL, legend.inset = c(0.02, 0.05),
   legend.names = NULL, ...)
 }
 \arguments{
@@ -16,13 +16,13 @@ plotConvergence(data, problem, method = c("mean", "median"), col = "black",
 \item{problem}{name of the problem for which the plot is made. Can be omitted
 if the \code{data} contains results for a single problem only.}
 
-\item{method}{one of "mean" (default) or "median". Determines how the values
+\item{type}{one of "mean" (default) or "median". Determines how the values
 from the different search runs are aggregated.}
 
 \item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
 providing a vector. Defaults to black.}
 
-\item{type}{plot type, defaults to staircase. See \link{matplot} and
+\item{plot.type}{defaults to "s" (staircase). See \link{matplot} and
 \link{plot} for more information about the possible plot types.}
 
 \item{lty}{line type(s), used cyclically when providing a vector. If set to
@@ -47,8 +47,9 @@ plot. Defaults to TRUE.}
 \item{legend.pos}{position of the legend, specified as a keyword  keyword
 from the list \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"},
 \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"},
-\code{"right"} and \code{"center"}. Defaults to \code{"bottomright"} as
-this area of the plot usually has a lot of available space.}
+\code{"right"} and \code{"center"}. If set to \code{NULL}, defaults to
+\code{"bottomright"} in case values are being maximized or
+\code{"topright"} in case of minimization.}
 
 \item{legend.inset}{inset distance(s) from the margins as a fraction of the
 plot region. If a single value is given, it is used for both margins; if

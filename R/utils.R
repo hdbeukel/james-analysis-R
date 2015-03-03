@@ -47,7 +47,7 @@ openPDF <- function(file)
   }
 }
 
-# wrapper to output formatted strings
+# Wrapper to output formatted strings.
 printf <- function(...){
   cat(sprintf(...))
 }
@@ -67,7 +67,9 @@ getSingleProblem <- function(data){
 
 # Get the name of the single search applied to the given problem
 # in the given data. If the data contains results for more than
-# one search for this problem, an error is thrown.
+# one search for this problem, an error is thrown. Argument
+# 'problem' can be omitted if 'data' contains results for a
+# single problem only.
 getSingleSearch <- function(data, problem){
   all.searches <- getSearches(data, problem)
   if(length(all.searches) > 1){
@@ -76,6 +78,51 @@ getSingleSearch <- function(data, problem){
   } else {
     # return name of only search
     return(all.searches[1])
+  }
+}
+
+# Check if values are being maximized or minimized for a given problem,
+# by comparing the first and last obtained value. If contradicting results
+# are found for different searches or runs solving the same problem, an
+# error is thrown. Argument 'problem' can be omitted if 'data' contains
+# results for a single problem only.
+isMinimizing <- function(data, problem){
+  # fall back to single problem if missing
+  if(missing(problem)){
+    problem <- getSingleProblem(data)
+  }
+  # get searches
+  searches <- getSearches(data, problem)
+  # check maximization/minimization for each run of each search
+  minimizing <- c()
+  for(search in searches){
+    runs <- getSearchRuns(data, problem, search)
+    for(run in runs){
+      first.value <- head(run$values, 1)
+      last.value <- tail(run$values, 1)
+      if(first.value > last.value){
+        minimizing <- c(minimizing, TRUE)
+      } else if (first.value < last.value){
+        minimizing <- c(minimizing, FALSE)
+      }
+    }
+  }
+  # process results
+  if(length(minimizing) == 0){
+    # all convergence curves are "flat"; can be both (and does not matter)
+    # default to maximizing
+    return(FALSE)
+  } else {
+    minimizing <- unique(minimizing)
+    if(length(minimizing) != 1){
+      msg <- sprintf(paste("contradicting results for problem \"%s\";",
+                           "some search runs were maximizing,",
+                           "other minimizing"),
+                     problem)
+      stop(msg)
+    } else {
+      return(minimizing[1])
+    }
   }
 }
 
