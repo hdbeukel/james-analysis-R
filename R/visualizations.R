@@ -24,67 +24,75 @@
 #' @param data data object containing the analysis results
 #' @param problem name of the problem for which the plot is made. Can be omitted
 #'   if the \code{data} contains results for a single problem only.
-#' @param type one of "mean" (default) or "median". Determines how the values 
-#'   from the different search runs are aggregated.
+#' @param type one of \code{"mean"} (default) or \code{"median"}. Determines how
+#'   the values from the different search runs are aggregated.
 #' @param col color(s) of the plotted lines and/or symbols, used cyclically when
-#'   providing a vector. Defaults to black.
-#' @param plot.type defaults to "s" (staircase). See \link{matplot} and 
+#'   providing a vector. Defaults to \code{"black"}.
+#' @param plot.type defaults to \code{"s"} (staircase). See \link{matplot} and 
 #'   \link{plot} for more information about the possible plot types.
-#' @param lty line type(s), used cyclically when providing a vector. If set to 
-#'   \code{NULL}, line types default to 1:n where n is the number of plotted 
-#'   curves.
-#' @param title plot title.
-#' @param xlab x-axis label.
-#' @param ylab y-axis label.
+#' @param lty line type(s), used cyclically when providing a vector. Line types 
+#'   default to 1:n where n is the number of plotted curves.
+#' @param title plot title. Defaults to \code{"Convergence curve(s)"}.
+#' @param subtitle plot subtitle. By default, a subtitle will be added that 
+#'   states the name of the problem for which the plot was made. If no substitle
+#'   is desired, set \code{subtitle = ""}.
+#' @param xlab x-axis label. Defaults to \code{"Time (ms)"}.
+#' @param ylab y-axis label. Defaults to \code{"Value"}.
 #' @param min.time zoom in on the part of the curve(s) above this time on the 
-#'   \code{x-}axis. Defaults to NA in which case no minimum time is set.
+#'   \code{x-}axis.
 #' @param max.time zoom in on the part of the curve(s) below this time on the 
-#'   \code{x-}axis. Defaults to NA in which case no maximum time is set.
+#'   \code{x-}axis.
 #' @param legend logical: indicates whether a legend should be added to the 
 #'   plot. Defaults to TRUE.
 #' @param legend.pos position of the legend, specified as a keyword  keyword 
 #'   from the list \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, 
 #'   \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, 
-#'   \code{"right"} and \code{"center"}. If set to \code{NULL}, defaults to 
-#'   \code{"bottomright"} in case values are being maximized or 
-#'   \code{"topright"} in case of minimization.
+#'   \code{"right"} and \code{"center"}. Defaults to \code{"bottomright"} in 
+#'   case values are being maximized or \code{"topright"} in case of 
+#'   minimization.
 #' @param legend.inset inset distance(s) from the margins as a fraction of the 
 #'   plot region. If a single value is given, it is used for both margins; if 
 #'   two values are given, the first is used for \code{x-}distance, the second 
-#'   for \code{y-}distance.
-#' @param legend.names names to be shown in the legend. If set to \code{NULL}, 
-#'   the names default to the search names obtained from calling 
-#'   \code{\link{getSearches}} on the given \code{data} and \code{problem}.
+#'   for \code{y-}distance. Defaults to \code{c(0.02, 0.05)}.
+#' @param legend.names names to be shown in the legend. Defaults to the search 
+#'   names obtained from calling \code{\link{getSearches}} on the given 
+#'   \code{data} and \code{problem}.
 #' @param ... optional other arguments passed to \code{\link{matplot}}.
 #'   
 #' @export
 plotConvergence <- function(data, problem, type = c("mean", "median"),
-                            col = "black", plot.type = "s", lty = NULL,
-                            title = "Convergence curve(s)", xlab = "Runtime (ms)",
-                            ylab = "Value", min.time = NA, max.time = NA,
-                            legend = TRUE, legend.pos = NULL,
-                            legend.inset = c(0.02, 0.05), legend.names = NULL,
+                            col = "black", plot.type = "s", lty,
+                            title = "Convergence curve(s)", subtitle,
+                            xlab = "Time (ms)", ylab = "Value",
+                            min.time, max.time, legend = TRUE, legend.pos,
+                            legend.inset = c(0.02, 0.05), legend.names,
                             ...){
   UseMethod("plotConvergence")
 }
 #' @export
 plotConvergence.james <- function(data, problem, type = c("mean", "median"),
-                                  col = "black", plot.type = "s", lty = NULL,
-                                  title = "Convergence curve(s)", xlab = "Runtime (ms)",
-                                  ylab = "Value", min.time = NA, max.time = NA,
-                                  legend = TRUE, legend.pos = NULL,
-                                  legend.inset = c(0.02, 0.05), legend.names = NULL,
+                                  col = "black", plot.type = "s", lty,
+                                  title = "Convergence curve(s)", subtitle,
+                                  xlab = "Runtime (ms)", ylab = "Value",
+                                  min.time, max.time, legend = TRUE, legend.pos,
+                                  legend.inset = c(0.02, 0.05), legend.names,
                                   ...){
+  
+  # fall back to single problem if not specified
+  if(missing(problem)){
+    problem <- getSingleProblem(data)
+  }
+  
   # check input
   agg.function <- get(match.arg(type))
   
-  if(!is.na(min.time) && !is.numeric(min.time)){
+  if(!missing(min.time) && !is.numeric(min.time)){
     stop("'min.time' should be \"numeric\"")
   }
-  if(!is.na(max.time) && !is.numeric(max.time)){
+  if(!missing(max.time) && !is.numeric(max.time)){
     stop("'max.time' should be \"numeric\"")
   }
-  if(!is.na(min.time) && !is.na(max.time) && min.time >= max.time){
+  if(!missing(min.time) && !missing(max.time) && min.time >= max.time){
     stop("'min.time' should be smaller than 'max.time'")
   }
   if(!is.logical(legend)){
@@ -148,7 +156,7 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
     }
     
     # zoom in on specific time interval, if desired
-    if(!is.na(min.time)){
+    if(!missing(min.time)){
       # save values before minimum time
       pre <- agg.values[agg.times < min.time]
       # truncate
@@ -160,7 +168,7 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
         agg.times <- c(min.time, agg.times)
       }
     }
-    if(!is.na(max.time)){
+    if(!missing(max.time)){
       # save values after maximum time
       post <- agg.values[agg.times > max.time]
       # truncate
@@ -201,21 +209,28 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
   }
 
   # set default line types
-  if(is.null(lty)){
+  if(missing(lty)){
     lty <- 1:num.searches
+  }
+  # set default subtitle
+  if(missing(subtitle)){
+    subtitle <- sprintf("Problem \"%s\"", problem)
   }
   # plot curves
   matplot(x = times.matrix, y = values.matrix,
           col = col, type = plot.type, lty = lty,
           main = title, xlab = xlab, ylab = ylab,
           ...)
+  # add subtitle
+  mtext(subtitle)
+  # add legend, if desired
   if(legend){
     # set default position if not specified
-    if(is.null(legend.pos)){
+    if(missing(legend.pos)){
       legend.pos <- ifelse(isMinimizing(data, problem), "topright", "bottomright")
     }
     # set default legend names if not specified
-    if(is.null(legend.names)){
+    if(missing(legend.names)){
       legend.names = searches
     }
     # add legend
@@ -256,30 +271,32 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
 #' @param x data object containing the analysis results
 #' @param problem name of the problem for which the plot is made. Can be omitted
 #'   if the data \code{x} contains results for a single problem only.
-#' @param type one of "quality" (default) or "time". If set to "quality", the 
-#'   final solution's value is reported; if set to "time", the time until 
-#'   convergence is reported (in both cases, the respective distribution of 
-#'   values found during the different search runs is shown). In the latter 
-#'   case, the argument \code{r} is used to decide when a search run has 
-#'   converged.
+#' @param type one of \code{"quality"} (default) or \code{"time"}. If set to 
+#'   "quality", the final solution's value is reported; if set to "time", the 
+#'   time until convergence is reported. In both cases, the respective 
+#'   distribution of values found during the different search runs is shown. In 
+#'   the latter case, the argument \code{r} is used to decide when a search run 
+#'   has converged.
 #' @param r convergence ratio, only used if \code{type} is \code{"time"}. 
 #'   Defaults to 0.99. Should be a numeric value in [0,1].
-#' @param title plot title. If set to \code{NULL}, defaults to \code{"Solution 
-#'   quality"} or \code{"Convergence time"} when \code{type} is set to 
-#'   \code{"quality"} or \code{"time"}, respectively.
-#' @param ylab y-axis label. If set to \code{NULL}, defaults to \code{"Value"} 
-#'   or \code{"Time"} when \code{type} is set to \code{"quality"} or 
+#' @param title plot title. Defaults to \code{"Solution quality"} or 
+#'   \code{"Convergence time"} when \code{type} is set to \code{"quality"} or 
 #'   \code{"time"}, respectively.
-#' @param names names to be shown on the x-axis under the box plots. If set to 
-#'   \code{NULL}, the names default to the search names obtained from calling 
-#'   \code{\link{getSearches}} on the given data \code{x} and \code{problem}.
+#' @param subtitle plot subtitle. By default, a subtitle is added that states 
+#'   the name of the problem for which the plot is made. If \code{type} is
+#'   \code{"time"} the subtitle also mentions the applied convergence ratio
+#'   \code{r}. If no subtitle is desired set \code{subtitle = ""}.
+#' @param ylab y-axis label. Defaults to \code{"Value"} or \code{"Time (ms)"} 
+#'   when \code{type} is set to \code{"quality"} or \code{"time"}, respectively.
+#' @param names names to be shown on the x-axis under the box plots. Defaults to
+#'   the search names obtained from calling \code{\link{getSearches}} on the 
+#'   given data \code{x} and \code{problem}.
 #' @param ... any additional parameters are passed to \code{boxplot}.
 #'   
 #' @importFrom graphics boxplot
 #' @export
 boxplot.james <- function(x, problem, type = c("quality", "time"),
-                          r = 0.99, title = NULL, ylab = NULL,
-                          names = NULL, ...){
+                          r = 0.99, title, subtitle, ylab, names, ...){
   
   # rename data object
   data <- x
@@ -333,10 +350,13 @@ boxplot.james <- function(x, problem, type = c("quality", "time"),
     return(run.values)
   })
   
-  # set default title and ylab if missing
+  # set default title, subtitle and ylab if missing
   if(type == "quality"){
     if(missing(title)){
       title <- "Solution quality"
+    }
+    if(missing(subtitle)){
+      subtitle <- sprintf("Problem \"%s\"", problem)
     }
     if(missing(ylab)){
       ylab <- "Value"
@@ -345,8 +365,11 @@ boxplot.james <- function(x, problem, type = c("quality", "time"),
     if(missing(title)){
       title <- "Convergence time"
     }
+    if(missing(subtitle)){
+      subtitle <- sprintf("Problem \"%s\" (convergence ratio: %.16g)", problem, r)
+    }
     if(missing(ylab)){
-      ylab <- "Time"
+      ylab <- "Time (ms)"
     }
   }
   # set default names if missing
@@ -356,6 +379,8 @@ boxplot.james <- function(x, problem, type = c("quality", "time"),
   
   # create box pot
   boxplot(search.dists, main = title, ylab = ylab, names = names, ...)
+  # add subtitle
+  mtext(subtitle)
   
 }
 

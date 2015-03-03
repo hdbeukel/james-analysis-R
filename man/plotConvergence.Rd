@@ -5,10 +5,9 @@
 \title{Plot convergence curves}
 \usage{
 plotConvergence(data, problem, type = c("mean", "median"), col = "black",
-  plot.type = "s", lty = NULL, title = "Convergence curve(s)",
-  xlab = "Runtime (ms)", ylab = "Value", min.time = NA, max.time = NA,
-  legend = TRUE, legend.pos = NULL, legend.inset = c(0.02, 0.05),
-  legend.names = NULL, ...)
+  plot.type = "s", lty, title = "Convergence curve(s)", subtitle,
+  xlab = "Time (ms)", ylab = "Value", min.time, max.time, legend = TRUE,
+  legend.pos, legend.inset = c(0.02, 0.05), legend.names, ...)
 }
 \arguments{
 \item{data}{data object containing the analysis results}
@@ -16,30 +15,33 @@ plotConvergence(data, problem, type = c("mean", "median"), col = "black",
 \item{problem}{name of the problem for which the plot is made. Can be omitted
 if the \code{data} contains results for a single problem only.}
 
-\item{type}{one of "mean" (default) or "median". Determines how the values
-from the different search runs are aggregated.}
+\item{type}{one of \code{"mean"} (default) or \code{"median"}. Determines how
+the values from the different search runs are aggregated.}
 
 \item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
-providing a vector. Defaults to black.}
+providing a vector. Defaults to \code{"black"}.}
 
-\item{plot.type}{defaults to "s" (staircase). See \link{matplot} and
+\item{plot.type}{defaults to \code{"s"} (staircase). See \link{matplot} and
 \link{plot} for more information about the possible plot types.}
 
-\item{lty}{line type(s), used cyclically when providing a vector. If set to
-\code{NULL}, line types default to 1:n where n is the number of plotted
-curves.}
+\item{lty}{line type(s), used cyclically when providing a vector. Line types
+default to 1:n where n is the number of plotted curves.}
 
-\item{title}{plot title.}
+\item{title}{plot title. Defaults to \code{"Convergence curve(s)"}.}
 
-\item{xlab}{x-axis label.}
+\item{subtitle}{plot subtitle. By default, a subtitle will be added that
+states the name of the problem for which the plot was made. If no substitle
+is desired, set \code{subtitle = ""}.}
 
-\item{ylab}{y-axis label.}
+\item{xlab}{x-axis label. Defaults to \code{"Time (ms)"}.}
+
+\item{ylab}{y-axis label. Defaults to \code{"Value"}.}
 
 \item{min.time}{zoom in on the part of the curve(s) above this time on the
-\code{x-}axis. Defaults to NA in which case no minimum time is set.}
+\code{x-}axis.}
 
 \item{max.time}{zoom in on the part of the curve(s) below this time on the
-\code{x-}axis. Defaults to NA in which case no maximum time is set.}
+\code{x-}axis.}
 
 \item{legend}{logical: indicates whether a legend should be added to the
 plot. Defaults to TRUE.}
@@ -47,18 +49,18 @@ plot. Defaults to TRUE.}
 \item{legend.pos}{position of the legend, specified as a keyword  keyword
 from the list \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"},
 \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"},
-\code{"right"} and \code{"center"}. If set to \code{NULL}, defaults to
-\code{"bottomright"} in case values are being maximized or
-\code{"topright"} in case of minimization.}
+\code{"right"} and \code{"center"}. Defaults to \code{"bottomright"} in
+case values are being maximized or \code{"topright"} in case of
+minimization.}
 
 \item{legend.inset}{inset distance(s) from the margins as a fraction of the
 plot region. If a single value is given, it is used for both margins; if
 two values are given, the first is used for \code{x-}distance, the second
-for \code{y-}distance.}
+for \code{y-}distance. Defaults to \code{c(0.02, 0.05)}.}
 
-\item{legend.names}{names to be shown in the legend. If set to \code{NULL},
-the names default to the search names obtained from calling
-\code{\link{getSearches}} on the given \code{data} and \code{problem}.}
+\item{legend.names}{names to be shown in the legend. Defaults to the search
+names obtained from calling \code{\link{getSearches}} on the given
+\code{data} and \code{problem}.}
 
 \item{...}{optional other arguments passed to \code{\link{matplot}}.}
 }

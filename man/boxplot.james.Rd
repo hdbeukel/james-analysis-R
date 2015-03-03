@@ -5,7 +5,7 @@
 \title{Solution quality and convergence time box plots}
 \usage{
 \method{boxplot}{james}(x, problem, type = c("quality", "time"), r = 0.99,
-  title = NULL, ylab = NULL, names = NULL, ...)
+  title, subtitle, ylab, names, ...)
 }
 \arguments{
 \item{x}{data object containing the analysis results}
@@ -13,27 +13,31 @@
 \item{problem}{name of the problem for which the plot is made. Can be omitted
 if the data \code{x} contains results for a single problem only.}
 
-\item{type}{one of "quality" (default) or "time". If set to "quality", the
-final solution's value is reported; if set to "time", the time until
-convergence is reported (in both cases, the respective distribution of
-values found during the different search runs is shown). In the latter
-case, the argument \code{r} is used to decide when a search run has
-converged.}
+\item{type}{one of \code{"quality"} (default) or \code{"time"}. If set to
+"quality", the final solution's value is reported; if set to "time", the
+time until convergence is reported. In both cases, the respective
+distribution of values found during the different search runs is shown. In
+the latter case, the argument \code{r} is used to decide when a search run
+has converged.}
 
 \item{r}{convergence ratio, only used if \code{type} is \code{"time"}.
 Defaults to 0.99. Should be a numeric value in [0,1].}
 
-\item{title}{plot title. If set to \code{NULL}, defaults to \code{"Solution
-quality"} or \code{"Convergence time"} when \code{type} is set to
-\code{"quality"} or \code{"time"}, respectively.}
-
-\item{ylab}{y-axis label. If set to \code{NULL}, defaults to \code{"Value"}
-or \code{"Time"} when \code{type} is set to \code{"quality"} or
+\item{title}{plot title. Defaults to \code{"Solution quality"} or
+\code{"Convergence time"} when \code{type} is set to \code{"quality"} or
 \code{"time"}, respectively.}
 
-\item{names}{names to be shown on the x-axis under the box plots. If set to
-\code{NULL}, the names default to the search names obtained from calling
-\code{\link{getSearches}} on the given data \code{x} and \code{problem}.}
+\item{subtitle}{plot subtitle. By default, a subtitle is added that states
+the name of the problem for which the plot is made. If \code{type} is
+\code{"time"} the subtitle also mentions the applied convergence ratio
+\code{r}. If no subtitle is desired set \code{subtitle = ""}.}
+
+\item{ylab}{y-axis label. Defaults to \code{"Value"} or \code{"Time (ms)"}
+when \code{type} is set to \code{"quality"} or \code{"time"}, respectively.}
+
+\item{names}{names to be shown on the x-axis under the box plots. Defaults to
+the search names obtained from calling \code{\link{getSearches}} on the
+given data \code{x} and \code{problem}.}
 
 \item{...}{any additional parameters are passed to \code{boxplot}.}
 }
