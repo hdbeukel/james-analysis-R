@@ -227,51 +227,137 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
 
 ################################## BOX PLOTS ##################################
 
-# #' Solution quality and convergence time box plots
-# #' 
-# #' Produce box-and-whisker plots for the searches that have been applied to the 
-# #' given problem, visualizing the distribution of the best found solution's 
-# #' value (solution quality) or the time until a certain ratio of this value has 
-# #' been reached (convergence time) in subsequent search runs.
-# #' 
-# #' If the data \code{x} contains results for a single problem only, the argument
-# #' \code{problem} can be omitted. If desired to produce box plots for a 
-# #' selection of the applied searches, use \link{reduceJAMES} to extract the 
-# #' respective data.
-# #' 
-# #' The plots are made using the generic \link{boxplot} method called on a list 
-# #' of vectors containing the distribution samples for each search.
-# #' 
-# #' Any additional parameters are passed to \link{boxplot}.
-# #' 
-# #' @param x data object containing the analysis results
-# #' @param problem name of the problem for which the plot is made. Can be omitted
-# #'   if the data \code{x} contains results for a single problem only.
-# #' @param type one of "quality" (default) or "time". In both cases, box plots 
-# #'   are produced to visualize the distribution of a certain metric calculated 
-# #'   from the results obtained in the different runs of each search. If set to 
-# #'   "quality", the final solution's value is reported; if set to "time", the 
-# #'   time until a certain ratio (see parameter \code{conv.ratio}) of this value 
-# #'   has been reached is shown.
-# #' @param conv.ratio only used if \code{type} is \code{"time"}. At the time when
-# #'   the given ratio of the final best found solution's value has been obtained,
-# #'   the search process is said to have converged.
-# #'   
-# #' @importFrom graphics boxplot
-# #' @export
-# boxplot.james <- function(x, problem, type = c("quality", "time"),
-#                           conv.ratio = 0.99, title = NULL, ylab = NULL,
-#                           ...){
-#   
-#   # rename data object
-#   data <- x
-#   
-#   # ...
-#   
-#   # get searches
-#   searches <- getSearches(data, problem)
-# 
-# }
+#' Solution quality and convergence time box plots
+#' 
+#' Produce box-and-whisker plots for the searches that have been applied to the 
+#' given problem, visualizing the distribution of the best found solution's 
+#' value (solution quality) or time until convergence in subsequent search runs.
+#' 
+#' If the data \code{x} contains results for a single problem only, the argument
+#' \code{problem} can be omitted. If desired to produce box plots for a 
+#' selection of the applied searches, use \link{reduceJAMES} to extract the 
+#' respective data.
+#' 
+#' The convergence time of a search run is defined as the time at which a 
+#' certain value threshold is crossed. This threshold is computed from the given
+#' convergence ratio \code{r} as follows: if values are being maximized, 
+#' \code{thr = (1-r)*min + r*max}; else, \code{thr = (1-r)*max + r*min}. In the 
+#' former case, a search run is said to have converged as soon as it reaches a 
+#' value which is larger than or equal to the threshold \code{thr}. In the 
+#' latter case, convergence occurs when the values drop below the threshold. The
+#' convergence ratio \code{r} defaults to 0.99. If set to 1, a search run is 
+#' said to have converged when the final best solution is found.
+#' 
+#' The plots are made using the generic \link{boxplot} method called on a list 
+#' of vectors containing the distribution samples for each search.
+#' 
+#' Any additional parameters are passed to \link{boxplot}.
+#' 
+#' @param x data object containing the analysis results
+#' @param problem name of the problem for which the plot is made. Can be omitted
+#'   if the data \code{x} contains results for a single problem only.
+#' @param type one of "quality" (default) or "time". If set to "quality", the 
+#'   final solution's value is reported; if set to "time", the time until 
+#'   convergence is reported (in both cases, the respective distribution of 
+#'   values found during the different search runs is shown). In the latter 
+#'   case, the argument \code{r} is used to decide when a search run has 
+#'   converged.
+#' @param r convergence ratio, only used if \code{type} is \code{"time"}. 
+#'   Defaults to 0.99. Should be a numeric value in [0,1].
+#' @param title plot title. If set to \code{NULL}, defaults to \code{"Solution 
+#'   quality"} or \code{"Convergence time"} when \code{type} is set to 
+#'   \code{"quality"} or \code{"time"}, respectively.
+#' @param ylab y-axis label. If set to \code{NULL}, defaults to \code{"Value"} 
+#'   or \code{"Time"} when \code{type} is set to \code{"quality"} or 
+#'   \code{"time"}, respectively.
+#' @param names names to be shown on the x-axis under the box plots. If set to 
+#'   \code{NULL}, the names default to the search names obtained from calling 
+#'   \code{\link{getSearches}} on the given data \code{x} and \code{problem}.
+#' @param ... any additional parameters are passed to \code{boxplot}.
+#'   
+#' @importFrom graphics boxplot
+#' @export
+boxplot.james <- function(x, problem, type = c("quality", "time"),
+                          r = 0.99, title = NULL, ylab = NULL,
+                          names = NULL, ...){
+  
+  # rename data object
+  data <- x
+  
+  # check input
+  type <- match.arg(type)
+  if(!is.numeric(r) || r < 0 || r > 1){
+    stop("'r' should be a \"numeric\" value in [0,1]")
+  }
+  
+  # fall back to single problem if missing
+  if(missing(problem)){
+    problem <- getSingleProblem(data)
+  }
+  
+  # check whether values are maximized or minimized
+  minimizing <- isMinimizing(data, problem)
+  
+  # get searches
+  searches <- getSearches(data, problem)
+  
+  # create extractor function used to extract a value from a search run
+  if(type == "quality"){
+    # extract final value
+    extract <- function(run){
+      final.value <- tail(run$values, 1)
+      return(final.value)
+    }
+  } else {
+    # extract convergence time
+    extract <- function(run){
+      max.value <- max(run$values)
+      min.value <- min(run$values)
+      if(minimizing){
+        thr <- (1-r)*max.value + r*min.value
+        conv.time <- min(run$times[run$values <= thr])
+      } else {
+        thr <- (1-r)*min.value + r*max.value
+        conv.time <- min(run$times[run$values >= thr])
+      }
+      return(conv.time)
+    }
+  }
+  
+  # extract values from runs of each search
+  search.dists <- lapply(searches, function(search){
+    # get runs
+    runs <- getSearchRuns(data, problem, search)
+    # extract values from runs
+    run.values <- sapply(runs, extract)
+    return(run.values)
+  })
+  
+  # set default title and ylab if missing
+  if(type == "quality"){
+    if(missing(title)){
+      title <- "Solution quality"
+    }
+    if(missing(ylab)){
+      ylab <- "Value"
+    }
+  } else {
+    if(missing(title)){
+      title <- "Convergence time"
+    }
+    if(missing(ylab)){
+      ylab <- "Time"
+    }
+  }
+  # set default names if missing
+  if(missing(names)){
+    names <- searches
+  }
+  
+  # create box pot
+  boxplot(search.dists, main = title, ylab = ylab, names = names, ...)
+  
+}
 
 
 
