@@ -222,7 +222,7 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
           main = title, xlab = xlab, ylab = ylab,
           ...)
   # add subtitle
-  mtext(subtitle)
+  mtext(subtitle, line = 0.25)
   # add legend, if desired
   if(legend){
     # set default position if not specified
@@ -380,7 +380,7 @@ boxplot.james <- function(x, problem, type = c("quality", "time"),
   # create box pot
   boxplot(search.dists, main = title, ylab = ylab, names = names, ...)
   # add subtitle
-  mtext(subtitle)
+  mtext(subtitle, line = 0.25)
   
 }
 
