@@ -12,8 +12,8 @@ This package can be used to further analyze and visualize results produced by th
 \tabular{ll}{
 Package: \tab james.analysis\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2015-02-23\cr
+Version: \tab 1.0.0\cr
+Date: \tab 2015-03-04\cr
 License: \tab MIT\cr
 }
 This version is written for use in combination with version 0.2.1 of the JAMES extensions module.
