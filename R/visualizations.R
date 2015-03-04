@@ -9,17 +9,20 @@
 #' 
 #' If the \code{data} contains results for a single problem only, the argument 
 #' \code{problem} can be omitted. If desired to plot convergence curves for a 
-#' selection of the applied searches, use \link{reduceJAMES} to extract the 
-#' respective data.
+#' selection of the applied searches, use \code{\link{reduceJAMES}} to extract 
+#' the respective data.
 #' 
-#' The curves are plotted using \link{matplot}. More information about the 
-#' graphical parameters are provided in the documentation of this function. By 
-#' default, a legend is added to the plot. This can be omitted by setting 
+#' The curves are plotted using \code{\link{matplot}}. More information about 
+#' the graphical parameters are provided in the documentation of this function. 
+#' By default, a legend is added to the plot. This can be omitted by setting 
 #' \code{legend = FALSE}. If desired, a custom legend may then be added. It is 
 #' possible to zoom in on a specific region of the plot using the parameters 
 #' \code{min.time} and \code{max.time}.
 #' 
-#' Any additional parameters are passed to \link{matplot}.
+#' Any additional parameters are passed to \code{\link{matplot}}.
+#' 
+#' @seealso
+#' \code{\link{matplot}}
 #' 
 #' @param data data object containing the analysis results
 #' @param problem name of the problem for which the plot is made. Can be omitted
@@ -28,8 +31,9 @@
 #'   the values from the different search runs are aggregated.
 #' @param col color(s) of the plotted lines and/or symbols, used cyclically when
 #'   providing a vector. Defaults to \code{"black"}.
-#' @param plot.type defaults to \code{"s"} (staircase). See \link{matplot} and 
-#'   \link{plot} for more information about the possible plot types.
+#' @param plot.type defaults to \code{"s"} (staircase). See 
+#'   \code{\link{matplot}} and \code{\link{plot}} for more information about the
+#'   possible plot types.
 #' @param lty line type(s), used cyclically when providing a vector. Line types 
 #'   default to 1:n where n is the number of plotted curves.
 #' @param title plot title. Defaults to \code{"Convergence curve(s)"}.
@@ -250,23 +254,18 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
 #' 
 #' If the data \code{x} contains results for a single problem only, the argument
 #' \code{problem} can be omitted. If desired to produce box plots for a 
-#' selection of the applied searches, use \link{reduceJAMES} to extract the 
-#' respective data.
+#' selection of the applied searches, use \code{\link{reduceJAMES}} to extract 
+#' the respective data.
 #' 
-#' The convergence time of a search run is defined as the time at which a 
-#' certain value threshold is crossed. This threshold is computed from the given
-#' convergence ratio \code{r} as follows: if values are being maximized, 
-#' \code{thr = (1-r)*min + r*max}; else, \code{thr = (1-r)*max + r*min}. In the 
-#' former case, a search run is said to have converged as soon as it reaches a 
-#' value which is larger than or equal to the threshold \code{thr}. In the 
-#' latter case, convergence occurs when the values drop below the threshold. The
-#' convergence ratio \code{r} defaults to 0.99. If set to 1, a search run is 
-#' said to have converged when the final best solution is found.
+#' Convergence times are computed with \code{\link{getConvergenceTimes}}.
 #' 
-#' The plots are made using the generic \link{boxplot} method called on a list 
-#' of vectors containing the distribution samples for each search.
+#' The plots are made using the generic \code{\link{boxplot}} method called on a
+#' list of vectors containing the distribution samples for each search.
 #' 
-#' Any additional parameters are passed to \link{boxplot}.
+#' Any additional parameters are passed to \code{\link{boxplot}}.
+#' 
+#' @seealso
+#' \code{\link{getConvergenceTimes}}, \code{\link{boxplot}}
 #' 
 #' @param x data object containing the analysis results
 #' @param problem name of the problem for which the plot is made. Can be omitted
@@ -283,15 +282,15 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
 #'   \code{"Convergence time"} when \code{type} is set to \code{"quality"} or 
 #'   \code{"time"}, respectively.
 #' @param subtitle plot subtitle. By default, a subtitle is added that states 
-#'   the name of the problem for which the plot is made. If \code{type} is
-#'   \code{"time"} the subtitle also mentions the applied convergence ratio
+#'   the name of the problem for which the plot is made. If \code{type} is 
+#'   \code{"time"} the subtitle also mentions the applied convergence ratio 
 #'   \code{r}. If no subtitle is desired set \code{subtitle = ""}.
 #' @param ylab y-axis label. Defaults to \code{"Value"} or \code{"Time (ms)"} 
 #'   when \code{type} is set to \code{"quality"} or \code{"time"}, respectively.
 #' @param names names to be shown on the x-axis under the box plots. Defaults to
 #'   the search names obtained from calling \code{\link{getSearches}} on the 
 #'   given data \code{x} and \code{problem}.
-#' @param ... any additional parameters are passed to \code{boxplot}.
+#' @param ... any additional parameters are passed to \code{\link{boxplot}}.
 #'   
 #' @importFrom graphics boxplot
 #' @export
@@ -303,50 +302,27 @@ boxplot.james <- function(x, problem, type = c("quality", "time"),
   
   # check input
   type <- match.arg(type)
-  if(!is.numeric(r) || r < 0 || r > 1){
-    stop("'r' should be a \"numeric\" value in [0,1]")
-  }
   
   # fall back to single problem if missing
   if(missing(problem)){
     problem <- getSingleProblem(data)
   }
   
-  # check whether values are maximized or minimized
-  minimizing <- isMinimizing(data, problem)
-  
   # get searches
   searches <- getSearches(data, problem)
   
-  # create extractor function used to extract a value from a search run
+  # set function to extract values from search runs
   if(type == "quality"){
-    # extract final value
-    extract <- function(run){
-      final.value <- tail(run$values, 1)
-      return(final.value)
-    }
+    # extract final values
+    extract <- getBestSolutionValues
   } else {
-    # extract convergence time
-    extract <- function(run){
-      max.value <- max(run$values)
-      min.value <- min(run$values)
-      if(minimizing){
-        thr <- (1-r)*max.value + r*min.value
-        conv.time <- min(run$times[run$values <= thr])
-      } else {
-        thr <- (1-r)*min.value + r*max.value
-        conv.time <- min(run$times[run$values >= thr])
-      }
-      return(conv.time)
-    }
+    # extract convergence times (using specified convergence ratio)
+    extract <- function(...){getConvergenceTimes(..., r = r)}
   }
   
   # extract values from runs of each search
   search.dists <- lapply(searches, function(search){
-    # get runs
-    runs <- getSearchRuns(data, problem, search)
-    # extract values from runs
-    run.values <- sapply(runs, extract)
+    run.values <- extract(data, problem, search)
     return(run.values)
   })
   

@@ -21,8 +21,9 @@ the values from the different search runs are aggregated.}
 \item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
 providing a vector. Defaults to \code{"black"}.}
 
-\item{plot.type}{defaults to \code{"s"} (staircase). See \link{matplot} and
-\link{plot} for more information about the possible plot types.}
+\item{plot.type}{defaults to \code{"s"} (staircase). See
+\code{\link{matplot}} and \code{\link{plot}} for more information about the
+possible plot types.}
 
 \item{lty}{line type(s), used cyclically when providing a vector. Line types
 default to 1:n where n is the number of plotted curves.}
@@ -72,16 +73,19 @@ median). This is a generic S3 method.
 \details{
 If the \code{data} contains results for a single problem only, the argument
 \code{problem} can be omitted. If desired to plot convergence curves for a
-selection of the applied searches, use \link{reduceJAMES} to extract the
-respective data.
+selection of the applied searches, use \code{\link{reduceJAMES}} to extract
+the respective data.
 
-The curves are plotted using \link{matplot}. More information about the
-graphical parameters are provided in the documentation of this function. By
-default, a legend is added to the plot. This can be omitted by setting
+The curves are plotted using \code{\link{matplot}}. More information about
+the graphical parameters are provided in the documentation of this function.
+By default, a legend is added to the plot. This can be omitted by setting
 \code{legend = FALSE}. If desired, a custom legend may then be added. It is
 possible to zoom in on a specific region of the plot using the parameters
 \code{min.time} and \code{max.time}.
 
-Any additional parameters are passed to \link{matplot}.
+Any additional parameters are passed to \code{\link{matplot}}.
+}
+\seealso{
+\code{\link{matplot}}
 }
 

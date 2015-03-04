@@ -400,6 +400,73 @@ getBestSolutions.james <- function(data, problem, search){
   return(best.solutions)
 }
 
+#' Get convergence times
+#' 
+#' Get the convergence times of the different runs of the given \code{search} 
+#' applied to the given \code{problem}. This is a generic S3 method.
+#' 
+#' If the \code{data} contains results for a single problem only, the argument 
+#' \code{problem} can be omitted. Likewise, if -- for the considered 
+#' \code{problem} -- results are available for a single search only, the 
+#' argument \code{search} can be omitted.
+#' 
+#' The convergence time of a search run is defined as the time at which a 
+#' certain value threshold is crossed. This threshold is computed from the given
+#' convergence ratio \code{r} as follows: if values are being maximized, 
+#' \code{thr = (1-r)*min + r*max}; else, \code{thr = (1-r)*max + r*min}, where 
+#' \code{min} and \code{max} are the minimum and maximum observed value in the 
+#' considered search run, respectively. In case of maximization, a search run is
+#' said to have converged as soon as it reaches a value which is larger than or 
+#' equal to the threshold \code{thr}. In case of minimization, convergence 
+#' occurs when the values drop below the threshold. The convergence ratio 
+#' \code{r} defaults to 0.99. If set to 1, a search run is said to have 
+#' converged when the final best solution is found.
+#' 
+#' @param data data object containing the analysis results
+#' @param problem name of the analyzed problem. Can be omitted if the 
+#'   \code{data} contains results for a single problem only.
+#' @param search name of the applied search. Can be omitted if the \code{data} 
+#'   contains results for a single search only (for the considered 
+#'   \code{problem}).
+#' @param r convergence ratio. Defaults to 0.99. Numeric value in [0,1].
+#'   
+#' @return Numeric vector containing the convergence times of each run.
+#'   
+#' @export
+getConvergenceTimes <- function(data, problem, search, r = 0.99){
+  UseMethod("getConvergenceTimes")
+}
+#' @export
+getConvergenceTimes.james <- function(data, problem, search, r = 0.99){
+  
+  # check input
+  if(!is.numeric(r) || r < 0 || r > 1){
+    stop("'r' should be a \"numeric\" value in [0,1]")
+  }
+  
+  # extract search runs
+  runs <- getSearchRuns(data, problem, search)
+  
+  # check whether values are maximized or minimized
+  minimizing <- isMinimizing(data, problem)
+  
+  # compute convergence times
+  conv.times <- sapply(runs, function(run){
+    max.value <- max(run$values)
+    min.value <- min(run$values)
+    if(minimizing){
+      thr <- (1-r)*max.value + r*min.value
+      conv.time <- min(run$times[run$values <= thr])
+    } else {
+      thr <- (1-r)*min.value + r*max.value
+      conv.time <- min(run$times[run$values >= thr])
+    }
+    return(conv.time)
+  })
+  
+  return(conv.times)
+}
+
 ################################## SUMMARY ################################## 
 
 #' @export

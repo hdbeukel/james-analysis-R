@@ -39,7 +39,7 @@ when \code{type} is set to \code{"quality"} or \code{"time"}, respectively.}
 the search names obtained from calling \code{\link{getSearches}} on the
 given data \code{x} and \code{problem}.}
 
-\item{...}{any additional parameters are passed to \code{boxplot}.}
+\item{...}{any additional parameters are passed to \code{\link{boxplot}}.}
 }
 \description{
 Produce box-and-whisker plots for the searches that have been applied to the
@@ -49,22 +49,17 @@ value (solution quality) or time until convergence in subsequent search runs.
 \details{
 If the data \code{x} contains results for a single problem only, the argument
 \code{problem} can be omitted. If desired to produce box plots for a
-selection of the applied searches, use \link{reduceJAMES} to extract the
-respective data.
+selection of the applied searches, use \code{\link{reduceJAMES}} to extract
+the respective data.
 
-The convergence time of a search run is defined as the time at which a
-certain value threshold is crossed. This threshold is computed from the given
-convergence ratio \code{r} as follows: if values are being maximized,
-\code{thr = (1-r)*min + r*max}; else, \code{thr = (1-r)*max + r*min}. In the
-former case, a search run is said to have converged as soon as it reaches a
-value which is larger than or equal to the threshold \code{thr}. In the
-latter case, convergence occurs when the values drop below the threshold. The
-convergence ratio \code{r} defaults to 0.99. If set to 1, a search run is
-said to have converged when the final best solution is found.
+Convergence times are computed with \code{\link{getConvergenceTimes}}.
 
-The plots are made using the generic \link{boxplot} method called on a list
-of vectors containing the distribution samples for each search.
+The plots are made using the generic \code{\link{boxplot}} method called on a
+list of vectors containing the distribution samples for each search.
 
-Any additional parameters are passed to \link{boxplot}.
+Any additional parameters are passed to \code{\link{boxplot}}.
+}
+\seealso{
+\code{\link{getConvergenceTimes}}, \code{\link{boxplot}}
 }
 
