@@ -73,7 +73,7 @@ plotConvergence <- function(data, problem, type = c("mean", "median"),
 plotConvergence.james <- function(data, problem, type = c("mean", "median"),
                                   col = "black", plot.type = "s", lty,
                                   title = "Convergence curve(s)", subtitle,
-                                  xlab = "Runtime (ms)", ylab = "Value",
+                                  xlab = "Time (ms)", ylab = "Value",
                                   min.time, max.time, legend = TRUE, legend.pos,
                                   legend.inset = c(0.02, 0.05), legend.names,
                                   ...){
@@ -214,7 +214,7 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
   }
   # set default subtitle
   if(missing(subtitle)){
-    subtitle <- sprintf("Problem \"%s\"", problem)
+    subtitle <- sprintf("Problem: %s", problem)
   }
   # plot curves
   matplot(x = times.matrix, y = values.matrix,
@@ -356,7 +356,7 @@ boxplot.james <- function(x, problem, type = c("quality", "time"),
       title <- "Solution quality"
     }
     if(missing(subtitle)){
-      subtitle <- sprintf("Problem \"%s\"", problem)
+      subtitle <- sprintf("Problem: %s", problem)
     }
     if(missing(ylab)){
       ylab <- "Value"
@@ -366,7 +366,7 @@ boxplot.james <- function(x, problem, type = c("quality", "time"),
       title <- "Convergence time"
     }
     if(missing(subtitle)){
-      subtitle <- sprintf("Problem \"%s\" (convergence ratio: %.16g)", problem, r)
+      subtitle <- sprintf("Problem: %s (convergence ratio: %.16g)", problem, r)
     }
     if(missing(ylab)){
       ylab <- "Time (ms)"
