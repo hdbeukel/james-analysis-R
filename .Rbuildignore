@@ -5,4 +5,5 @@
 ^\.gitignore$
 ^data-raw$
 ^CHANGES.md$
-^cran-comments.md$
+^cran-comments\.md$
+^\.travis\.yml$
