@@ -16,8 +16,7 @@ after_failure:
   - ./travis-tool.sh dump_logs
 
 env:
-  - WARNINGS_ARE_ERRORS=1
-  - BOOTSTRAP_LATEX=1
+  - WARNINGS_ARE_ERRORS=1 BOOTSTRAP_LATEX=1
 
 notifications:
   email:
