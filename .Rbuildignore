@@ -4,6 +4,6 @@
 ^\.git$
 ^\.gitignore$
 ^data-raw$
-^CHANGES.md$
+^NEWS\.md$
 ^cran-comments\.md$
 ^\.travis\.yml$
