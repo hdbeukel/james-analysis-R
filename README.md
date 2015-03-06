@@ -32,7 +32,7 @@ Please use the forum instead of directly mailing the developers whenever possibl
 Changes
 =======
 
-A list of changes is provided in the CHANGES file.
+A list of changes is provided in the NEWS file.
 
 
 [james-github]:     https://github.com/hdbeukel/james
