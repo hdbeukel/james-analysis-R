@@ -5,6 +5,16 @@ JAMES Analysis R Package
 
 The JAMES analysis R package is part of the [JAMES framework][james-github]. This R package is used to analyze and visualize results obtained using the analysis tools from the [extensions module][james-extensions].
 
+Install
+=======
+
+The package is considered for inclusion on CRAN. Currently, it can directly be installed from GitHub using the `devtools` library:
+
+```
+library(devtools)
+install_github("hdbeukel/james-analysis-R")
+```
+
 Documentation
 =============
 
