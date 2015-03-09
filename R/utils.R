@@ -126,7 +126,15 @@ isMinimizing <- function(data, problem){
   }
 }
 
+### RELEASE QUESTIONS ###
 
+release_questions <- function() {
+  c(
+    "Has the release date been set?",
+    "Has the version number been updated?",
+    "Is NEWS.md up to date?"
+  )
+}
 
 
 
