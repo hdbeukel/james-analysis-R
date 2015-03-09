@@ -6,7 +6,7 @@
 JAMES Analysis R Package
 }
 \description{
-This package can be used to further analyze and visualize results produced by the analysis tools from the extensions module of the JAMES framework. Functions are provided to plot convergence curves, compare algorithm performance, assess the influence of parameter values, etc.
+This package can be used to further analyze and visualize results produced by the analysis tools from the extensions module of the JAMES framework. Functions are provided to plot convergence curves, draw box plots of solution quality or convergence times and to summarize, manipulate or extract data from the results.
 }
 \details{
 \tabular{ll}{

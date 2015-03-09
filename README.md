@@ -3,12 +3,34 @@ JAMES Analysis R Package
 
 [![Build Status](https://img.shields.io/travis/hdbeukel/james-analysis-R.svg?style=flat)](https://travis-ci.org/hdbeukel/james-analysis-R)
 
-The JAMES analysis R package is part of the [JAMES framework][james-github]. This R package is used to analyze and visualize results of studies performed in JAMES, using the analysis tools from the [extensions module][james-extensions], to compare algorithm performance, assess influence of parameter values, etc.
+The JAMES analysis R package is part of the [JAMES framework][james-github]. This R package is used to analyze and visualize results obtained using the analysis tools from the [extensions module][james-extensions].
 
 Documentation
 =============
 
-Examples of how to use this R package will soon be provided at the [website][james-website].
+Use `data <- readJAMES("path/to/file")` the load a JSON file in R that was created using the analysis tools from the JAMES extensions module (in Java). An object of class `james` is returned. Run `summary(data)` to summarize the results, or `mergeJAMES` and `reduceJAMES` to manipulate them.
+
+To extract data, the following functions are provided:
+
+ - `getProblems`
+ - `getSearches`
+ - `getSearchRuns`
+ - `getNumSearchRuns`
+ - `getBestSolutions`
+ - `getBestSolutionValues`
+ - `getConvergenceTimes`
+
+To visualize the results, use:
+
+ - `plotConvergence`
+ - `boxplot`
+
+Detailed documentation is provided for each function and can be accessed by typing `?function`, as usual. To view the help file for the box plots, type `?boxplot.james` (this is an implementation of the S3 method `boxplot` from the standard `graphics` package for class `james`).
+
+Examples
+=============
+
+Some examples are included in the help files of the available functions. More extensive examples of how to analyze the results will soon be provided at the [website][james-website].
 
 License and copyright
 =====================
