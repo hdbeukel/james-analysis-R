@@ -21,9 +21,9 @@ extensions module.
 }
 \examples{
 # get path to raw JSON file included in package distribution
-json.file <- system.file("extdata", "comparison.json", package = "james.analysis")
+json.file <- system.file("extdata", "james.json", package = "james.analysis")
 
 # read results from file
-comparison <- readJAMES(json.file)
+james <- readJAMES(json.file)
 }
 
