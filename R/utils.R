@@ -52,6 +52,13 @@ printf <- function(...){
   cat(sprintf(...))
 }
 
+# Wrapper to check if a vector is sorted
+is.sorted <- function(v){
+  return(!is.unsorted(v))
+}
+
+####### DATA HANDLING #######
+
 # Get the name of the single problem contained in the given data.
 # If the data contains results for more than one problem, an error
 # is thrown.

@@ -3,14 +3,14 @@
 
 #' Read analysis results from JSON file
 #' 
-#' Read results from a JSON file produced by the analysis tools from the JAMES
+#' Read results from a JSON file produced by the analysis tools from the JAMES 
 #' extensions module.
 #' 
-#' @param file character vector: relative path to a JSON file containing results
-#'   produced by the analysis tools from the JAMES extensions module
+#' @param file string: path to a JSON file containing results produced
+#'   by the analysis tools from the JAMES extensions module.
 #' @return S3 object of class "james" containing the results of running a number
-#'   of searches on a set of problems, performing a number of repeated runs per
-#'   search
+#'   of searches on a set of problems, where each search has been repeatedly
+#'   applied for a number of runs.
 #'   
 #' @examples
 #' # get path to raw JSON file included in package distribution
@@ -19,15 +19,104 @@
 #' # read results from file
 #' james <- readJAMES(json.file)
 #' 
+#' summary(james)
+#' 
 #' @export
 readJAMES <- function(file) {
   
   # check input
-  if (is.null(file) || is.na(file) || !is.character(file)){
-    stop("'file' should be a character vector")
+  if (is.null(file) || is.na(file) || !is.character(file)
+      || length(file) != 1 || nchar(file) == 0){
+    stop("'file' should be a non-empty string")
+  }
+  # check if file exists
+  if(!file.exists(file)){
+    msg <- sprintf("'file' %s does not exist", file)
+    stop(msg)
   }
   # read JSON file
   results <- rjson::fromJSON(file = file)
+  
+  # check structure
+  
+  unexpectedStructure <- function(){
+    msg <- sprintf("'unexpected JSON structure in file' %s", file)
+    stop(msg)
+  }
+  
+  # check: non empty list of problems
+  if(!is.list(results) || length(results) == 0){
+    unexpectedStructure()
+  }
+  # check problem names
+  problem.names <- names(results)
+  if(is.null(problem.names) || anyDuplicated(problem.names)){
+    unexpectedStructure()
+  }
+  for(n in problem.names){
+    if(is.na(n) || nchar(n) == 0){
+      unexpectedStructure()
+    }
+  }
+  # check each problem
+  for(problem in results){
+    # check: non empty list of searches
+    if(!is.list(problem) || length(problem) == 0){
+      unexpectedStructure()
+    }
+    # check search names
+    search.names <- names(problem)
+    if(is.null(search.names) || anyDuplicated(search.names)){
+          unexpectedStructure()
+        }
+    for(n in search.names){
+      if(is.na(n) || nchar(n) == 0){
+        unexpectedStructure()
+      }
+    }
+    # check each search
+    for(search in problem){
+      # check: non empty list of search runs
+      if(!is.list(search) || length(search) == 0){
+        unexpectedStructure()
+      }
+      # check each run
+      for(run in search){
+        # check: list with 2 or 3 elements
+        if(!is.list(run) || !any(length(run) == c(2,3))){
+          unexpectedStructure()
+        }
+        # check names
+        run.components <- names(run)
+        if(is.null(run.components) || anyDuplicated(run.components)){
+          unexpectedStructure()
+        }
+        for(n in run.components){
+          if(is.na(n) || nchar(n) == 0){
+            unexpectedStructure()
+          }
+        }
+        if(!("times" %in% run.components)
+           || !("values" %in% run.components)
+           || (length(run) == 3) && !("best.solution" %in% run.components)){
+          unexpectedStructure()
+        }
+        # check that number of times and values agree
+        if(length(run$times) != length(run$values)){
+          unexpectedStructure()
+        }
+        # check that times are increasing
+        if(is.unsorted(run$times)){
+          unexpectedStructure()
+        }
+        # check that values are increasing or decreasing
+        if(is.unsorted(run$values) && is.unsorted(rev(run$values))){
+          unexpectedStructure()
+        }
+      }
+    }
+  }
+  
   # set class name
   class(results) <- "james"
   

@@ -7,13 +7,13 @@
 readJAMES(file)
 }
 \arguments{
-\item{file}{character vector: relative path to a JSON file containing results
-produced by the analysis tools from the JAMES extensions module}
+\item{file}{string: path to a JSON file containing results produced
+by the analysis tools from the JAMES extensions module.}
 }
 \value{
 S3 object of class "james" containing the results of running a number
-  of searches on a set of problems, performing a number of repeated runs per
-  search
+  of searches on a set of problems, where each search has been repeatedly
+  applied for a number of runs.
 }
 \description{
 Read results from a JSON file produced by the analysis tools from the JAMES
@@ -25,5 +25,7 @@ json.file <- system.file("extdata", "james.json", package = "james.analysis")
 
 # read results from file
 james <- readJAMES(json.file)
+
+summary(james)
 }
 
