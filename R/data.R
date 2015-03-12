@@ -1,4 +1,38 @@
 
+############################# BINARY DATA DOCS ##############################
+
+#' Results of example algorithm comparison
+#' 
+#' Contains results of an example analysis performed with the JAMES extensions 
+#' module. The performance of two algorithms is compared (random descent and 
+#' parallel tempering) for a core selection problem in which the mean 
+#' entry-to-nearest-entry distance is maximized. Four different data sets have 
+#' been analyzed. Details about the performed analysis are provided at the 
+#' website (see below).
+#' 
+#' @format S3 object of class "james", as if produced by 
+#'   \code{\link{readJAMES}}.
+#' @source \url{http://www.jamesframework.org/examples/#analysis}
+#' @seealso \code{\link{readJAMES}}
+#'   
+#' @examples
+#' # load data
+#' data(james)
+#' summary(james)
+#' 
+#' # plot convergence curves for maize accession data set
+#' plotConvergence(james, problem = "maize-accession", min.time = 100, max.time = 100000)
+#' 
+#' # create box plots of solution values (quality) and convergence times
+#' boxplot(james, problem = "maize-accession")
+#' boxplot(james, problem = "maize-accession", type = "time")
+#' 
+#' # extract solution values and convergence times for parallel tempering
+#' getBestSolutionValues(james, problem = "maize-accession", search = "Parallel Tempering")
+#' getConvergenceTimes(james, problem = "maize-accession", search = "Parallel Tempering")
+#' 
+"james"
+
 #################################### I/O ####################################
 
 #' Read analysis results from JSON file
@@ -6,11 +40,22 @@
 #' Read results from a JSON file produced by the analysis tools from the JAMES 
 #' extensions module.
 #' 
-#' @param file string: path to a JSON file containing results produced
-#'   by the analysis tools from the JAMES extensions module.
+#' @param file string: path to a JSON file containing results produced by the 
+#'   analysis tools from the JAMES extensions module.
 #' @return S3 object of class "james" containing the results of running a number
-#'   of searches on a set of problems, where each search has been repeatedly
-#'   applied for a number of runs.
+#'   of searches on a set of problems, where each search has been repeatedly 
+#'   applied for a number of runs. Data can be manipulated and extracted using 
+#'   the provided functions (see below).
+#'   
+#' @seealso Example data: \code{\link{james}}.
+#'   
+#'   Data access and manipulations methods: \code{\link{reduceJAMES}}, 
+#'   \code{\link{mergeJAMES}}, \code{\link{getProblems}}, 
+#'   \code{\link{getSearches}}, \code{\link{getSearchRuns}}, 
+#'   \code{\link{getNumSearchRuns}}, \code{\link{getBestSolutionValues}}, 
+#'   \code{\link{getBestSolutions}}, \code{\link{getConvergenceTimes}}.
+#'   
+#'   Plot functions: \code{\link{plotConvergence}}, \code{\link{boxplot.james}}.
 #'   
 #' @examples
 #' # get path to raw JSON file included in package distribution

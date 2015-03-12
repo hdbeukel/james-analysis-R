@@ -7,13 +7,14 @@
 readJAMES(file)
 }
 \arguments{
-\item{file}{string: path to a JSON file containing results produced
-by the analysis tools from the JAMES extensions module.}
+\item{file}{string: path to a JSON file containing results produced by the
+analysis tools from the JAMES extensions module.}
 }
 \value{
 S3 object of class "james" containing the results of running a number
   of searches on a set of problems, where each search has been repeatedly
-  applied for a number of runs.
+  applied for a number of runs. Data can be manipulated and extracted using
+  the provided functions (see below).
 }
 \description{
 Read results from a JSON file produced by the analysis tools from the JAMES
@@ -27,5 +28,16 @@ json.file <- system.file("extdata", "james.json", package = "james.analysis")
 james <- readJAMES(json.file)
 
 summary(james)
+}
+\seealso{
+Example data: \code{\link{james}}.
+
+  Data access and manipulations methods: \code{\link{reduceJAMES}},
+  \code{\link{mergeJAMES}}, \code{\link{getProblems}},
+  \code{\link{getSearches}}, \code{\link{getSearchRuns}},
+  \code{\link{getNumSearchRuns}}, \code{\link{getBestSolutionValues}},
+  \code{\link{getBestSolutions}}, \code{\link{getConvergenceTimes}}.
+
+  Plot functions: \code{\link{plotConvergence}}, \code{\link{boxplot.james}}.
 }
 

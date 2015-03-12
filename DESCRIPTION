@@ -9,5 +9,5 @@ Description: Analyze and visualize results of studies performed in JAMES, using 
 License: MIT + file LICENSE
 Depends: graphics (>= 2.15.3)
 Imports: rjson (>= 0.2.14), naturalsort (>= 0.1.2)
-LazyData: true
 Suggests: testthat (>= 0.9.1)
+LazyData: true
