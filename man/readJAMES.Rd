@@ -17,7 +17,7 @@ S3 object of class "james" containing the results of running a number
   the provided functions (see below).
 }
 \description{
-Read results from a JSON file produced by the analysis tools from the JAMES
+Read results from a JSON file produced by the analysis tools in the JAMES
 extensions module.
 }
 \examples{
@@ -26,8 +26,24 @@ json.file <- system.file("extdata", "james.json", package = "james.analysis")
 
 # read results from file
 james <- readJAMES(json.file)
-
 summary(james)
+
+# plot convergence curves for maize accession data set
+plotConvergence(james, problem = "maize-accession", min.time = 100, max.time = 100000)
+
+# create box plots of solution values (quality) and convergence times
+boxplot(james, problem = "maize-accession")
+boxplot(james, problem = "maize-accession", type = "time")
+
+# extract solution values and convergence times for parallel tempering and random descent
+v.pt <- getBestSolutionValues(james, problem = "maize-accession", search = "Parallel Tempering")
+t.pt <- getConvergenceTimes(james, problem = "maize-accession", search = "Parallel Tempering")
+v.rd <- getBestSolutionValues(james, problem = "maize-accession", search = "Random Descent")
+t.rd <- getConvergenceTimes(james, problem = "maize-accession", search = "Random Descent")
+
+# perform wilcoxon test to compare distributions across algorithms
+wilcox.test(v.pt, v.rd)
+wilcox.test(t.pt, t.rd)
 }
 \seealso{
 Example data: \code{\link{james}}.

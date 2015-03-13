@@ -32,9 +32,15 @@ plotConvergence(james, problem = "maize-accession", min.time = 100, max.time = 1
 boxplot(james, problem = "maize-accession")
 boxplot(james, problem = "maize-accession", type = "time")
 
-# extract solution values and convergence times for parallel tempering
-getBestSolutionValues(james, problem = "maize-accession", search = "Parallel Tempering")
-getConvergenceTimes(james, problem = "maize-accession", search = "Parallel Tempering")
+# extract solution values and convergence times for parallel tempering and random descent
+v.pt <- getBestSolutionValues(james, problem = "maize-accession", search = "Parallel Tempering")
+t.pt <- getConvergenceTimes(james, problem = "maize-accession", search = "Parallel Tempering")
+v.rd <- getBestSolutionValues(james, problem = "maize-accession", search = "Random Descent")
+t.rd <- getConvergenceTimes(james, problem = "maize-accession", search = "Random Descent")
+
+# perform wilcoxon test to compare distributions across algorithms
+wilcox.test(v.pt, v.rd)
+wilcox.test(t.pt, t.rd)
 }
 \seealso{
 \code{\link{readJAMES}}
