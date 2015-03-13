@@ -1,0 +1,46 @@
+#' JAMES Analysis R Package
+#' 
+#' This package can be used to further analyze and visualize results produced by
+#' the analysis tools from the extensions module of the JAMES framework.
+#' Functions are provided to plot convergence curves, draw box plots of solution
+#' quality or convergence times and to summarize, manipulate or extract data
+#' from the results.
+#' 
+#' \tabular{ll}{
+#' Package: \tab james.analysis\cr
+#' Type: \tab Package\cr
+#' Version: \tab 1.0.0\cr
+#' Date: \tab 2015-03-04\cr
+#' License: \tab MIT\cr
+#' }
+#' This version is written for use in combination with version 0.2.1 of the JAMES
+#' extensions module.
+#' 
+#' @section Example data: \code{\link{james}}
+#' 
+#' @section Data manipulation functions:
+#'   \itemize{
+#'    \item{\code{\link{reduceJAMES}}}
+#'    \item{\code{\link{mergeJAMES}}}
+#'    \item{\code{\link{getProblems}}}
+#'    \item{\code{\link{getSearches}}}
+#'    \item{\code{\link{getSearchRuns}}}
+#'    \item{\code{\link{getNumSearchRuns}}}
+#'    \item{\code{\link{getBestSolutionValues}}}
+#'    \item{\code{\link{getBestSolutions}}}
+#'    \item{\code{\link{getConvergenceTimes}}}
+#'   }
+#'   
+#' @section Plot functions:
+#'   \itemize{
+#'    \item{\code{\link{plotConvergence}}}
+#'    \item{\code{\link{boxplot.james}}}
+#'   }
+#' 
+#' @author Herman De Beukelaer <\email{Herman.DeBeukelaer@@UGent.be}>
+#' @references JAMES Website: \url{http://www.jamesframework.org}
+#'       
+#' @docType package
+#' @keywords package
+#' @name james.analysis
+NULL
