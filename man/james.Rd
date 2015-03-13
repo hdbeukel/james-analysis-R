@@ -25,22 +25,27 @@ website (see below).
 data(james)
 summary(james)
 
-# plot convergence curves for maize accession data set
-plotConvergence(james, problem = "maize-accession", min.time = 100, max.time = 100000)
+# plot convergence curves for coconut data set
+plotConvergence(james, problem = "coconut", min.time = 1000, max.time = 100000)
 
 # create box plots of solution values (quality) and convergence times
-boxplot(james, problem = "maize-accession")
-boxplot(james, problem = "maize-accession", type = "time")
+boxplot(james, problem = "coconut")
+boxplot(james, problem = "coconut", type = "time")
 
 # extract solution values and convergence times for parallel tempering and random descent
-v.pt <- getBestSolutionValues(james, problem = "maize-accession", search = "Parallel Tempering")
-t.pt <- getConvergenceTimes(james, problem = "maize-accession", search = "Parallel Tempering")
-v.rd <- getBestSolutionValues(james, problem = "maize-accession", search = "Random Descent")
-t.rd <- getConvergenceTimes(james, problem = "maize-accession", search = "Random Descent")
+values.pt <- getBestSolutionValues(james, problem = "coconut", search = "Parallel Tempering")
+times.pt <- getConvergenceTimes(james, problem = "coconut", search = "Parallel Tempering")
+values.rd <- getBestSolutionValues(james, problem = "coconut", search = "Random Descent")
+times.rd <- getConvergenceTimes(james, problem = "coconut", search = "Random Descent")
 
 # perform wilcoxon test to compare distributions across algorithms
-wilcox.test(v.pt, v.rd)
-wilcox.test(t.pt, t.rd)
+values.test <- wilcox.test(values.pt, values.rd)
+values.test
+times.test <- wilcox.test(times.pt, times.rd)
+times.test
+
+# adjust p-values for multiple testing
+p.adjust(c(values.test$p.value, times.test$p.value))
 }
 \seealso{
 \code{\link{readJAMES}}
