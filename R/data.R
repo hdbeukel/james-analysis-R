@@ -402,9 +402,9 @@ getSearches.james <- function(data, problem, filter, ...){
 #' S3 method.
 #' 
 #' If the \code{data} contains results for a single problem only, the argument 
-#' \code{problem} can be omitted. Likewise, if -- for the considered
-#' \code{problem} -- results are available for a single search only, the
-#' argument \code{search} can be omitted.
+#' \code{problem} can be omitted. Likewise, if for the considered \code{problem}
+#' results are available for a single search only, the argument \code{search} 
+#' can be omitted.
 #' 
 #' @param data data object containing the analysis results
 #' @param problem name of the analyzed problem. Can be omitted if the 
@@ -422,7 +422,8 @@ getSearches.james <- function(data, problem, filter, ...){
 #'   milliseconds since starting the search. A time of -1 indicates that the 
 #'   search was not yet running, which e.g. occurs when a local search adopts a 
 #'   random current solution during initialization. Times are always positive 
-#'   (or -1) and increasing.
+#'   (or -1) and increasing. Values are either increasing (in case of
+#'   maximization) or decreasing (in case of minimization).
 #'   
 #'   If contained in the given \code{data}, a run also has an element 
 #'   \code{best.solution} representing the final best solution found during that

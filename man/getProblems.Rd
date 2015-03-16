@@ -4,13 +4,15 @@
 \alias{getProblems}
 \title{Get names of analyzed problems}
 \usage{
-getProblems(data, filter)
+getProblems(data, filter, ...)
 }
 \arguments{
 \item{data}{data object containing the analysis results}
 
 \item{filter}{\link{regular expression} (optional). Only problem names that
-  match the given regex are returned, if any.}
+match the given regex are returned, if any.}
+
+\item{...}{any additional arguments are passed to \code{\link{grep}}.}
 }
 \value{
 Sorted vector of strings containing the names of all analyzed
@@ -18,7 +20,7 @@ Sorted vector of strings containing the names of all analyzed
   any).
 }
 \description{
-Extracts the names of all problems for which analysis results are contained
+Extracts the names of the problems for which analysis results are contained
 in the given data. This is a generic S3 method.
 }
 \details{

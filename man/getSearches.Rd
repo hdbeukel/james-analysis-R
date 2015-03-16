@@ -4,7 +4,7 @@
 \alias{getSearches}
 \title{Get names of applied searches}
 \usage{
-getSearches(data, problem, filter)
+getSearches(data, problem, filter, ...)
 }
 \arguments{
 \item{data}{data object containing the analysis results}
@@ -13,7 +13,9 @@ getSearches(data, problem, filter)
 \code{data} contains results for a single problem only.}
 
 \item{filter}{\link{regular expression} (optional). Only search names that
-  match the given regex are returned, if any.}
+match the given regex are returned, if any.}
+
+\item{...}{any additional arguments are passed to \code{\link{grep}}.}
 }
 \value{
 Sorted vector of strings containing the names of all searches that
