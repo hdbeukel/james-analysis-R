@@ -101,6 +101,15 @@ test_that("getSearchRuns returns a list of the expected format", {
   }
 })
 
+test_that("getSearchRuns returns the correct values", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      file <- paste("files/search-runs", p, s, ".rds", sep="-")
+      expect_equal_to_reference(getSearchRuns(james, p, s), file)
+    }
+  }
+})
+
 # test getNumSearchRuns
 
 test_that("number of search runs is correctly reported", {
@@ -247,7 +256,7 @@ test_that("convergence times are greater than or equal to -1", {
   }
 })
 
-test_that("getConvergenceTimes returns the correct solutions", {
+test_that("getConvergenceTimes returns the correct values", {
   for(p in getProblems(james)){
     for(s in getSearches(james, p)){
       file <- paste("files/convergence-times", p, s, ".rds", sep="-")
