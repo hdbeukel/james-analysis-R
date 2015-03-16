@@ -1,4 +1,4 @@
-context("Merge and reduce JSON files")
+context("Merge and reduce")
 
 # load data
 data(james)

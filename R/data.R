@@ -312,7 +312,7 @@ reduceJAMES.james <- function(data, problems = ".*", searches = ".*", ...){
 
 #' Get names of analyzed problems
 #' 
-#' Extracts the names of all problems for which analysis results are contained 
+#' Extracts the names of the problems for which analysis results are contained 
 #' in the given data. This is a generic S3 method.
 #' 
 #' Problem names are sorted using \link[naturalsort]{naturalsort}. If a 
@@ -323,21 +323,22 @@ reduceJAMES.james <- function(data, problems = ".*", searches = ".*", ...){
 #' @param data data object containing the analysis results
 #' @param filter \link{regular expression} (optional). Only problem names that 
 #'   match the given regex are returned, if any.
+#' @param ... any additional arguments are passed to \code{\link{grep}}.
 #'   
-#' @return Sorted vector of strings containing the names of all analyzed
+#' @return Sorted vector of strings containing the names of all analyzed 
 #'   problems that occur in the given data and match the applied filter (if
 #'   any).
 #'   
 #' @export
-getProblems <- function(data, filter){
+getProblems <- function(data, filter, ...){
   UseMethod("getProblems")
 }
 #' @export
-getProblems.james <- function(data, filter){
+getProblems.james <- function(data, filter, ...){
   problem.names <- names(data)
   # filter, if set
   if(!missing(filter)){
-    problem.names <- grep(pattern = filter, problem.names, value = TRUE)
+    problem.names <- grep(pattern = filter, problem.names, value = TRUE, ...)
   }
   # sort
   problem.names <- naturalsort::naturalsort(problem.names)
@@ -360,17 +361,18 @@ getProblems.james <- function(data, filter){
 #'   \code{data} contains results for a single problem only.
 #' @param filter \link{regular expression} (optional). Only search names that 
 #'   match the given regex are returned, if any.
+#' @param ... any additional arguments are passed to \code{\link{grep}}.
 #'   
 #' @return Sorted vector of strings containing the names of all searches that
 #'   have been applied to the given problem and match the applied filter (if
 #'   any).
 #'   
 #' @export
-getSearches <- function(data, problem, filter){
+getSearches <- function(data, problem, filter, ...){
   UseMethod("getSearches")
 }
 #' @export
-getSearches.james <- function(data, problem, filter){
+getSearches.james <- function(data, problem, filter, ...){
   # fall back to single problem if no problem specified
   if(missing(problem)){
     problem <- getSingleProblem(data)
@@ -386,7 +388,7 @@ getSearches.james <- function(data, problem, filter){
   search.names <- names(problem.data)
   # filter, if set
   if(!missing(filter)){
-    search.names <- grep(pattern = filter, search.names, value = TRUE);
+    search.names <- grep(pattern = filter, search.names, value = TRUE, ...);
   }
   # sort
   search.names <- naturalsort::naturalsort(search.names)
