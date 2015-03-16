@@ -194,8 +194,8 @@ readJAMES <- function(file) {
     }
   }
   
-  # set class name
-  class(results) <- "james"
+  # add class name
+  class(results) <- c("james", class(results))
   
   return(results)
 }
