@@ -177,8 +177,57 @@ test_that("number of best solutions corresponds to number of runs", {
   }
 })
 
+# test getConvergenceTimes
 
+test_that("getConvergenceTimes allows to omit problem name in case of a single problem", {
+  expect_error(getConvergenceTimes(james, search = "Random Descent"), "more than one problem")
+  # now for coconut problem only
+  james.coco <- reduceJAMES(james, problems = "coco")
+  getConvergenceTimes(james.coco, search = "Random Descent")
+})
 
+test_that("getConvergenceTimes allows to omit search name in case of a single search for the given problem", {
+  expect_error(getConvergenceTimes(james, problem = "coconut"), "more than one search for problem")
+  # now for random descent only
+  james.rd <- reduceJAMES(james, searches = "Descent")
+  getConvergenceTimes(james.rd, problem = "coconut")
+  # omit both problem and search name
+  james.rd.coco <- reduceJAMES(james.rd, problems = "coco")
+  getConvergenceTimes(james.rd.coco)
+})
+
+test_that("number of convergence times corresponds to number of runs", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      expect_equal(length(getConvergenceTimes(james, p, s)), getNumSearchRuns(james, p, s))
+    }
+  }
+})
+
+test_that("getConvergenceTimes complains if convergence ratio is not within [0,1]", {
+  expect_error(getConvergenceTimes(james, "coconut", "Random Descent", r = -1), "value in [0,1]", fixed = TRUE)
+  expect_error(getConvergenceTimes(james, "coconut", "Random Descent", r = 1.001), "value in [0,1]", fixed = TRUE)
+  expect_error(getConvergenceTimes(james, "coconut", "Random Descent", r = "abc"), "value in [0,1]", fixed = TRUE)
+})
+
+test_that("getConvergenceTimes returns a numeric vector", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      best.values <- getConvergenceTimes(james, p, s)
+      expect_true(is.vector(best.values))
+      expect_true(is.numeric(best.values))
+    }
+  }
+})
+
+test_that("convergence times are greater than or equal to -1", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      conv.times <- getConvergenceTimes(james, p, s)
+      expect_false(any(conv.times < -1))
+    }
+  }
+})
 
 
 

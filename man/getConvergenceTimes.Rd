@@ -20,6 +20,7 @@ contains results for a single search only (for the considered
 }
 \value{
 Numeric vector containing the convergence times of each run.
+        All convergence times are greater than or equal to -1.
 }
 \description{
 Get the convergence times of the different runs of the given \code{search}
@@ -27,9 +28,9 @@ applied to the given \code{problem}. This is a generic S3 method.
 }
 \details{
 If the \code{data} contains results for a single problem only, the argument
-\code{problem} can be omitted. Likewise, if -- for the considered
-\code{problem} -- results are available for a single search only, the
-argument \code{search} can be omitted.
+\code{problem} can be omitted. Likewise, if for the considered \code{problem}
+results are available for a single search only, the argument \code{search}
+can be omitted.
 
 The convergence time of a search run is defined as the time at which a
 certain value threshold is crossed. This threshold is computed from the given
