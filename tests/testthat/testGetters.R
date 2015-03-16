@@ -150,6 +150,15 @@ test_that("number of best solution values corresponds to number of runs", {
   }
 })
 
+test_that("getBestSolutionValues returns the correct values", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      file <- paste("files/best-solution-values", p, s, ".rds", sep="-")
+      expect_equal_to_reference(getBestSolutionValues(james, p, s), file)
+    }
+  }
+})
+
 # test getBestSolutions
 
 test_that("getBestSolutions allows to omit problem name in case of a single problem", {
@@ -173,6 +182,15 @@ test_that("number of best solutions corresponds to number of runs", {
   for(p in getProblems(james)){
     for(s in getSearches(james, p)){
       expect_equal(length(getBestSolutions(james, p, s)), getNumSearchRuns(james, p, s))
+    }
+  }
+})
+
+test_that("getBestSolutions returns the correct solutions", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      file <- paste("files/best-solutions", p, s, ".rds", sep="-")
+      expect_equal_to_reference(getBestSolutions(james, p, s), file)
     }
   }
 })
@@ -229,7 +247,14 @@ test_that("convergence times are greater than or equal to -1", {
   }
 })
 
-
+test_that("getConvergenceTimes returns the correct solutions", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      file <- paste("files/convergence-times", p, s, ".rds", sep="-")
+      expect_equal_to_reference(getConvergenceTimes(james, p, s), file)
+    }
+  }
+})
 
 
 
