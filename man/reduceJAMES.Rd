@@ -4,7 +4,7 @@
 \alias{reduceJAMES}
 \title{Reduce analysis results to selected problems and searches}
 \usage{
-reduceJAMES(data, problems = ".*", searches = ".*")
+reduceJAMES(data, problems = ".*", searches = ".*", ...)
 }
 \arguments{
 \item{data}{data object containing the analysis results}
@@ -14,13 +14,15 @@ problems that match the regular expression or occur in the list are
 retained.}
 
 \item{searches}{\link{regular expression} or list of strings. Only those
-  searches that match the regular expression or occur in the list are
-  retained.}
+searches that match the regular expression or occur in the list are
+retained.}
+
+\item{...}{any additional arguments are passed to \code{\link{grep}}.}
 }
 \value{
 Reduced data set containing only those problems and searches whose
   names match the respective regular expression or occur in the respective
-  list of strings.
+  list of strings. Assigned classes are retained.
 }
 \description{
 Reduce the given \code{data} by filtering the analyzed problems and applied

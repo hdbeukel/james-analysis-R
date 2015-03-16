@@ -203,16 +203,16 @@ readJAMES <- function(file) {
 ############################### MERGE - REDUCE ############################## 
 
 #' Merge analysis results
-#'
-#' Merge results from different analyses. If runs of the same search
-#' applied to the same problem are found in both data sets, these runs
-#' are merged into a single list. This is a generic S3 method.
 #' 
-#' @param data1 results from the first analysis
-#' @param data2 results from the second analysis
+#' Merge results from different analyses. If runs of the same search applied to
+#' the same problem are found in both data sets, these runs are merged into a
+#' single list. This is a generic S3 method.
 #' 
-#' @return merged data
-#'
+#' @param data1 results from the first analysis (of same class as \code{data2}).
+#' @param data2 results from the second analysis (of same class as \code{data1}).
+#'   
+#' @return merged data (assigned classes are retained)
+#'   
 #' @export
 mergeJAMES <- function(data1, data2){
   UseMethod("mergeJAMES")
@@ -254,7 +254,7 @@ mergeJAMES.james <- function(data1, data2){
 #' 
 #' Reduce the given \code{data} by filtering the analyzed problems and applied 
 #' searches based on the given list of names or \link{regular expression} 
-#' (pattern matching is done with \code{\link{grep}}). This is a generic S3
+#' (pattern matching is done with \code{\link{grep}}). This is a generic S3 
 #' method.
 #' 
 #' @param data data object containing the analysis results
@@ -264,23 +264,24 @@ mergeJAMES.james <- function(data1, data2){
 #' @param searches \link{regular expression} or list of strings. Only those 
 #'   searches that match the regular expression or occur in the list are 
 #'   retained.
+#' @param ... any additional arguments are passed to \code{\link{grep}}.
 #'   
-#' @return Reduced data set containing only those problems and searches whose 
-#'   names match the respective regular expression or occur in the respective 
-#'   list of strings.
+#' @return Reduced data set containing only those problems and searches whose
+#'   names match the respective regular expression or occur in the respective
+#'   list of strings. Assigned classes are retained.
 #'   
 #' @export
-reduceJAMES <- function(data, problems = ".*", searches = ".*"){
+reduceJAMES <- function(data, problems = ".*", searches = ".*", ...){
   UseMethod("reduceJAMES")
 }
 #' @export
-reduceJAMES.james <- function(data, problems = ".*", searches = ".*"){
+reduceJAMES.james <- function(data, problems = ".*", searches = ".*", ...){
   # determine which problems to drop
   problem.names <- getProblems(data)
   if(is.list(problems)){
     drop.problems <- setdiff(problem.names, problems)
   } else {
-    drop.problems <- grep(pattern = problems, problem.names, value = TRUE, invert = TRUE)
+    drop.problems <- grep(pattern = problems, problem.names, value = TRUE, invert = TRUE, ...)
   }
   # drop those problems
   data[drop.problems] <- NULL
@@ -291,7 +292,7 @@ reduceJAMES.james <- function(data, problems = ".*", searches = ".*"){
     if(is.list(searches)){
       drop.searches <- setdiff(search.names, searches)
     } else {
-      drop.searches <- grep(pattern = searches, search.names, value = TRUE, invert = TRUE)
+      drop.searches <- grep(pattern = searches, search.names, value = TRUE, invert = TRUE, ...)
     }
     # drop those searches
     data[[problem]][drop.searches] <- NULL

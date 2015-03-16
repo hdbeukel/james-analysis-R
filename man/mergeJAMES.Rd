@@ -7,16 +7,16 @@
 mergeJAMES(data1, data2)
 }
 \arguments{
-\item{data1}{results from the first analysis}
+\item{data1}{results from the first analysis (of same class as \code{data2}).}
 
-\item{data2}{results from the second analysis}
+\item{data2}{results from the second analysis (of same class as \code{data1}).}
 }
 \value{
-merged data
+merged data (assigned classes are retained)
 }
 \description{
-Merge results from different analyses. If runs of the same search
-applied to the same problem are found in both data sets, these runs
-are merged into a single list. This is a generic S3 method.
+Merge results from different analyses. If runs of the same search applied to
+the same problem are found in both data sets, these runs are merged into a
+single list. This is a generic S3 method.
 }
 
