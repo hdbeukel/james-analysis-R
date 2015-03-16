@@ -26,7 +26,8 @@ A list containing one element for each search run.
   milliseconds since starting the search. A time of -1 indicates that the
   search was not yet running, which e.g. occurs when a local search adopts a
   random current solution during initialization. Times are always positive
-  (or -1) and increasing.
+  (or -1) and increasing. Values are either increasing (in case of
+  maximization) or decreasing (in case of minimization).
 
   If contained in the given \code{data}, a run also has an element
   \code{best.solution} representing the final best solution found during that
