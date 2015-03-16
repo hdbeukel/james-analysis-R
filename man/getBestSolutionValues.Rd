@@ -27,8 +27,8 @@ method.
 }
 \details{
 If the \code{data} contains results for a single problem only, the argument
-\code{problem} can be omitted. Likewise, if -- for the considered
-\code{problem} -- results are available for a single search only, the
-argument \code{search} can be omitted.
+\code{problem} can be omitted. Likewise, if for the considered \code{problem}
+results are available for a single search only, the argument \code{search}
+can be omitted.
 }
 

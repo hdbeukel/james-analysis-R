@@ -27,9 +27,9 @@ method.
 }
 \details{
 If the \code{data} contains results for a single problem only, the argument
-\code{problem} can be omitted. Likewise, if -- for the considered
-\code{problem} -- results are available for a single search only, the
-argument \code{search} can be omitted.
+\code{problem} can be omitted. Likewise, if for the considered \code{problem}
+results are available for a single search only, the argument \code{search}
+can be omitted.
 
 When writing results obtained from the analysis tools in the JAMES extensions
 module to a JSON file, one should provide a JSON converter for the solution

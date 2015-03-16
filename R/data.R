@@ -498,9 +498,9 @@ getNumSearchRuns.james <- function(data, problem, search){
 #' method.
 #' 
 #' If the \code{data} contains results for a single problem only, the argument 
-#' \code{problem} can be omitted. Likewise, if -- for the considered
-#' \code{problem} -- results are available for a single search only, the
-#' argument \code{search} can be omitted.
+#' \code{problem} can be omitted. Likewise, if for the considered \code{problem}
+#' results are available for a single search only, the argument \code{search} 
+#' can be omitted.
 #' 
 #' @param data data object containing the analysis results
 #' @param problem name of the analyzed problem. Can be omitted if the 
@@ -509,7 +509,7 @@ getNumSearchRuns.james <- function(data, problem, search){
 #'   contains results for a single search only (for the considered 
 #'   \code{problem}).
 #'   
-#' @return Numeric vector containing the values of the best found solutions
+#' @return Numeric vector containing the values of the best found solutions 
 #'   during each run.
 #'   
 #' @export
@@ -532,17 +532,17 @@ getBestSolutionValues.james <- function(data, problem, search){
 #' method.
 #' 
 #' If the \code{data} contains results for a single problem only, the argument 
-#' \code{problem} can be omitted. Likewise, if -- for the considered
-#' \code{problem} -- results are available for a single search only, the
-#' argument \code{search} can be omitted.
+#' \code{problem} can be omitted. Likewise, if for the considered \code{problem}
+#' results are available for a single search only, the argument \code{search}
+#' can be omitted.
 #' 
 #' When writing results obtained from the analysis tools in the JAMES extensions
 #' module to a JSON file, one should provide a JSON converter for the solution 
 #' type of the analyzed problems if it is desired that the actual best found 
 #' solutions are contained in the output file. Therefore, these solutions might 
 #' not be available for all problems, searches or search runs. In case a best 
-#' solution is missing for a search run, the corresponding entry in the returned 
-#' list will be set to \code{NA}. It is possible that a list of only \code{NA}
+#' solution is missing for a search run, the corresponding entry in the returned
+#' list will be set to \code{NA}. It is possible that a list of only \code{NA} 
 #' is returned.
 #' 
 #' @param data data object containing the analysis results

@@ -113,14 +113,69 @@ test_that("number of search runs is correctly reported", {
   }
 })
 
+# test getBestSolutionValues
 
+test_that("getBestSolutionValues allows to omit problem name in case of a single problem", {
+  expect_error(getBestSolutionValues(james, search = "Random Descent"), "more than one problem")
+  # now for coconut problem only
+  james.coco <- reduceJAMES(james, problems = "coco")
+  getBestSolutionValues(james.coco, search = "Random Descent")
+})
 
+test_that("getBestSolutionValues allows to omit search name in case of a single search for the given problem", {
+  expect_error(getBestSolutionValues(james, problem = "coconut"), "more than one search for problem")
+  # now for random descent only
+  james.rd <- reduceJAMES(james, searches = "Descent")
+  getBestSolutionValues(james.rd, problem = "coconut")
+  # omit both problem and search name
+  james.rd.coco <- reduceJAMES(james.rd, problems = "coco")
+  getBestSolutionValues(james.rd.coco)
+})
 
+test_that("getBestSolutionValues returns a numeric vector", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      best.values <- getBestSolutionValues(james, p, s)
+      expect_true(is.vector(best.values))
+      expect_true(is.numeric(best.values))
+    }
+  }
+})
 
+test_that("number of best solution values corresponds to number of runs", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      expect_equal(length(getBestSolutionValues(james, p, s)), getNumSearchRuns(james, p, s))
+    }
+  }
+})
 
+# test getBestSolutions
 
+test_that("getBestSolutions allows to omit problem name in case of a single problem", {
+  expect_error(getBestSolutions(james, search = "Random Descent"), "more than one problem")
+  # now for coconut problem only
+  james.coco <- reduceJAMES(james, problems = "coco")
+  getBestSolutions(james.coco, search = "Random Descent")
+})
 
+test_that("getBestSolutions allows to omit search name in case of a single search for the given problem", {
+  expect_error(getBestSolutions(james, problem = "coconut"), "more than one search for problem")
+  # now for random descent only
+  james.rd <- reduceJAMES(james, searches = "Descent")
+  getBestSolutions(james.rd, problem = "coconut")
+  # omit both problem and search name
+  james.rd.coco <- reduceJAMES(james.rd, problems = "coco")
+  getBestSolutions(james.rd.coco)
+})
 
+test_that("number of best solutions corresponds to number of runs", {
+  for(p in getProblems(james)){
+    for(s in getSearches(james, p)){
+      expect_equal(length(getBestSolutions(james, p, s)), getNumSearchRuns(james, p, s))
+    }
+  }
+})
 
 
 
