@@ -104,7 +104,7 @@ test_that("getSearchRuns returns a list of the expected format", {
 test_that("getSearchRuns returns the correct values", {
   for(p in getProblems(james)){
     for(s in getSearches(james, p)){
-      file <- paste("files/search-runs", p, s, ".rds", sep="-")
+      file <- sprintf("files/search-runs-%s-%s.rds", gsub(" ", "-", p), gsub(" ", "-", s))
       expect_equal_to_reference(getSearchRuns(james, p, s), file)
     }
   }
@@ -162,7 +162,7 @@ test_that("number of best solution values corresponds to number of runs", {
 test_that("getBestSolutionValues returns the correct values", {
   for(p in getProblems(james)){
     for(s in getSearches(james, p)){
-      file <- paste("files/best-solution-values", p, s, ".rds", sep="-")
+      file <- sprintf("files/best-solution-values-%s-%s.rds", gsub(" ", "-", p), gsub(" ", "-", s))
       expect_equal_to_reference(getBestSolutionValues(james, p, s), file)
     }
   }
@@ -198,7 +198,7 @@ test_that("number of best solutions corresponds to number of runs", {
 test_that("getBestSolutions returns the correct solutions", {
   for(p in getProblems(james)){
     for(s in getSearches(james, p)){
-      file <- paste("files/best-solutions", p, s, ".rds", sep="-")
+      file <- sprintf("files/best-solutions-%s-%s.rds", gsub(" ", "-", p), gsub(" ", "-", s))
       expect_equal_to_reference(getBestSolutions(james, p, s), file)
     }
   }
@@ -259,7 +259,7 @@ test_that("convergence times are greater than or equal to -1", {
 test_that("getConvergenceTimes returns the correct values", {
   for(p in getProblems(james)){
     for(s in getSearches(james, p)){
-      file <- paste("files/convergence-times", p, s, ".rds", sep="-")
+      file <- sprintf("files/convergence-times-%s-%s.rds", gsub(" ", "-", p), gsub(" ", "-", s))
       expect_equal_to_reference(getConvergenceTimes(james, p, s), file)
     }
   }
