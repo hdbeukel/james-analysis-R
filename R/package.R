@@ -1,4 +1,4 @@
-#' Analysis tools for the `JAMES' framework.
+#' Analysis Tools for the `JAMES' Framework.
 #' 
 #' This package can be used to further analyze and visualize results of studies performed
 #' with the analysis tools in `JAMES', a Java framework for optimization using local
