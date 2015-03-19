@@ -1,8 +1,8 @@
-#' `JAMES' Analysis
+#' Analysis tools for the `JAMES' framework.
 #' 
-#' This package can be used to further analyze and visualize results produced by
-#' the analysis tools from the extensions module of `JAMES', a local search metaheuristic
-#' framework implemented in Java (see references).
+#' This package can be used to further analyze and visualize results of studies performed
+#' with the analysis tools in `JAMES', a Java framework for optimization using local
+#' search algorithms (see references).
 #' Functions are provided to plot convergence curves, draw box plots of solution
 #' quality or convergence times and to summarize, manipulate or extract data
 #' from the results.
