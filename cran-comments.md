@@ -19,4 +19,11 @@ There was 1 NOTE (because this is the first submission):
 	File 'LICENSE':
   		YEAR: 2015
   		COPYRIGHT HOLDER: Ghent University
-  		
+
+Only on win-builder the same NOTE also says:
+
+* Possibly mis-spelled words in DESCRIPTION:
+  metaheuristics (11:14)
+  
+This seems to be a false positive of the spell-checker on that
+platform as the word 'metaheuristics' is correctly spelled.
