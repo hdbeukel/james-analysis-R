@@ -17,7 +17,7 @@ from the results.
 Package: \tab james.analysis\cr
 Type: \tab Package\cr
 Version: \tab 1.0.0\cr
-Date: \tab 2015-03-04\cr
+Date: \tab 2015-03-19\cr
 License: \tab MIT\cr
 }
 This version is written for use in combination with version 0.2.1 of the JAMES
