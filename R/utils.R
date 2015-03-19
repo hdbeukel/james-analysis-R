@@ -139,8 +139,7 @@ release_questions <- function() {
   c(
     "Has the release date been set? Check DESCRIPTION and package docs.",
     "Has the version number been updated? Check DESCRIPTION, package docs and NEWS.md.",
-    "Is NEWS.md up to date?",
-    "Are the CRAN comments up to date?"
+    "Is NEWS.md up to date?"
   )
 }
 
