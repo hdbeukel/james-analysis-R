@@ -1,11 +1,14 @@
 Package: james.analysis
 Type: Package
-Title: JAMES Analysis R Package
+Title: `JAMES' Analysis
 Version: 1.0.0
 Date: 2015-03-19
 Author: Herman De Beukelaer
 Maintainer: Herman De Beukelaer <Herman.DeBeukelaer@UGent.be>
-Description: Analyze and visualize results of studies performed in JAMES, using the analysis tools from the extensions module.
+Description: Analyze and visualize results of studies performed using the analysis tools
+             from the extensions module of `JAMES', a Java framework for optimization using
+             local search metaheuristics (see URL).
+URL: http://www.jamesframework.org
 License: MIT + file LICENSE
 Depends: R (>= 2.10), graphics (>= 2.15.3)
 Imports: rjson (>= 0.2.14), naturalsort (>= 0.1.2)

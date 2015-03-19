@@ -33,7 +33,7 @@ A list containing one element for each search run.
   \code{best.solution} representing the final best solution found during that
   search run. The last element of \code{values} then indicates the value of
   this best solution. When writing results obtained from the analysis tools
-  in the JAMES extensions module to a JSON file, one should provide a JSON
+  in the `JAMES' extensions module to a JSON file, one should provide a JSON
   converter for the solution type of the analyzed problems if it is desired
   that the actual best found solutions are contained in the output file.
 }

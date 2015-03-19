@@ -8,7 +8,7 @@ readJAMES(file)
 }
 \arguments{
 \item{file}{string: path to a JSON file containing results produced by the
-analysis tools from the JAMES extensions module.}
+analysis tools from the `JAMES' extensions module.}
 }
 \value{
 S3 object of class "james" containing the results of running a number
@@ -17,7 +17,7 @@ S3 object of class "james" containing the results of running a number
   the provided functions (see below).
 }
 \description{
-Read results from a JSON file produced by the analysis tools in the JAMES
+Read results from a JSON file produced by the analysis tools in the `JAMES'
 extensions module.
 }
 \examples{
