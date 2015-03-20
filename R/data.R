@@ -3,7 +3,7 @@
 
 #' Results of example algorithm comparison
 #' 
-#' Contains results of an example analysis performed with the `JAMES' extensions 
+#' Contains results of an example analysis performed with the 'JAMES' extensions 
 #' module. The performance of two algorithms is compared (random descent and 
 #' parallel tempering) for a core selection problem in which the mean 
 #' entry-to-nearest-entry distance is maximized. Four different data sets have 
@@ -48,11 +48,11 @@
 
 #' Read analysis results from JSON file
 #' 
-#' Read results from a JSON file produced by the analysis tools in the `JAMES' 
+#' Read results from a JSON file produced by the analysis tools in the 'JAMES' 
 #' extensions module.
 #' 
 #' @param file string: path to a JSON file containing results produced by the 
-#'   analysis tools from the `JAMES' extensions module.
+#'   analysis tools from the 'JAMES' extensions module.
 #' @return S3 object of class "james" containing the results of running a number
 #'   of searches on a set of problems, where each search has been repeatedly 
 #'   applied for a number of runs. Data can be manipulated and extracted using 
@@ -429,7 +429,7 @@ getSearches.james <- function(data, problem, filter, ...){
 #'   \code{best.solution} representing the final best solution found during that
 #'   search run. The last element of \code{values} then indicates the value of 
 #'   this best solution. When writing results obtained from the analysis tools 
-#'   in the `JAMES' extensions module to a JSON file, one should provide a JSON 
+#'   in the 'JAMES' extensions module to a JSON file, one should provide a JSON 
 #'   converter for the solution type of the analyzed problems if it is desired 
 #'   that the actual best found solutions are contained in the output file.
 #'   
@@ -536,7 +536,7 @@ getBestSolutionValues.james <- function(data, problem, search){
 #' results are available for a single search only, the argument \code{search}
 #' can be omitted.
 #' 
-#' When writing results obtained from the analysis tools in the `JAMES' extensions
+#' When writing results obtained from the analysis tools in the 'JAMES' extensions
 #' module to a JSON file, one should provide a JSON converter for the solution 
 #' type of the analyzed problems if it is desired that the actual best found 
 #' solutions are contained in the output file. Therefore, these solutions might 

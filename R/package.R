@@ -1,4 +1,4 @@
-#' Analysis Tools for the `JAMES' Framework.
+#' Analysis Tools for the 'JAMES' Framework.
 #' 
 #' This package can be used to further analyze and visualize results of studies
 #' performed with the analysis tools in 'JAMES', a modern object-oriented Java
@@ -10,11 +10,11 @@
 #' \tabular{ll}{
 #' Package: \tab james.analysis\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.0.0\cr
-#' Date: \tab 2015-03-19\cr
+#' Version: \tab 1.0.0.9000\cr
+#' Date: \tab 2015-03-20\cr
 #' License: \tab MIT\cr
 #' }
-#' This version is written for use in combination with version 0.2.1 of the `JAMES'
+#' This version is written for use in combination with version 0.2.1 of the 'JAMES'
 #' extensions module.
 #' 
 #' @examples
@@ -67,7 +67,7 @@
 #'   }
 #' 
 #' @author Herman De Beukelaer <\email{Herman.DeBeukelaer@@UGent.be}>
-#' @references `JAMES' Website: \url{http://www.jamesframework.org}
+#' @references 'JAMES' Website: \url{http://www.jamesframework.org}
 #'       
 #' @docType package
 #' @keywords package

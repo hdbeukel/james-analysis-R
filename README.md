@@ -8,11 +8,16 @@ The JAMES analysis R package is part of the [JAMES framework][james-github]. Thi
 Install
 =======
 
-The package is considered for inclusion on CRAN. Currently, it can directly be installed from GitHub using the `devtools` library:
+The package is available [on CRAN][cran]. It can be installed with:
 
 ```
-library(devtools)
-install_github("hdbeukel/james-analysis-R")
+install.packages("james.analysis")
+```
+
+To load the package after installation:
+
+```
+library(james.analysis)
 ```
 
 Documentation
@@ -72,3 +77,4 @@ A list of changes is provided in the NEWS file.
 [james-website]:    http://www.jamesframework.org
 [james-forum]:      https://groups.google.com/forum/#!forum/james-users
 [james-contact]:    http://www.jamesframework.org/contact/
+[cran]:             http://cran.r-project.org/web/packages/james.analysis/index.html

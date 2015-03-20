@@ -137,9 +137,10 @@ isMinimizing <- function(data, problem){
 
 release_questions <- function() {
   c(
-    "Has the release date been set? Check DESCRIPTION and package docs.",
     "Has the version number been updated? Check DESCRIPTION, package docs and NEWS.md.",
-    "Is NEWS.md up to date?",
+    "Has the release date been set? Check DESCRIPTION, package docs and NEWS.md",
+    "Do the package docs refer to the correct version(s) of the extensions module?",
+    "Are the changes listed in NEWS.md up to date?",
     "Pushed everything to GitHub?"
   )
 }
