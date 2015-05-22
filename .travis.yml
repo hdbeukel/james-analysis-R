@@ -1,4 +1,6 @@
 
+sudo: required
+
 language: r
 
 warnings_are_errors: true
@@ -8,4 +10,3 @@ before_install: echo "options(repos = c(CRAN='http://cran.r-project.org'))" > ~/
 branches:
   only:
     - master
-    
