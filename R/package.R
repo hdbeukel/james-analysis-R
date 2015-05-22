@@ -14,8 +14,6 @@
 #' Date: \tab 2015-03-20\cr
 #' License: \tab MIT\cr
 #' }
-#' This version is written for use in combination with version 0.2.1 of the 'JAMES'
-#' extensions module.
 #' 
 #' @examples
 #' # load example data

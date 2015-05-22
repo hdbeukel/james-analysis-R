@@ -13,7 +13,7 @@
 james
 }
 \description{
-Contains results of an example analysis performed with the `JAMES' extensions
+Contains results of an example analysis performed with the 'JAMES' extensions
 module. The performance of two algorithms is compared (random descent and
 parallel tempering) for a core selection problem in which the mean
 entry-to-nearest-entry distance is maximized. Four different data sets have
