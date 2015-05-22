@@ -19,12 +19,13 @@ contains results for a single search only (for the considered
 \item{r}{convergence ratio. Defaults to 0.99. Numeric value in [0,1].}
 }
 \value{
-Numeric vector containing the convergence times of each run.
-        All convergence times are greater than or equal to -1.
+Numeric vector containing the convergence times of each run (in
+  milliseconds). All convergence times are greater than or equal to -1.
 }
 \description{
 Get the convergence times of the different runs of the given \code{search}
-applied to the given \code{problem}. This is a generic S3 method.
+applied to the given \code{problem} (in milliseconds). This is a generic S3
+method.
 }
 \details{
 If the \code{data} contains results for a single problem only, the argument
