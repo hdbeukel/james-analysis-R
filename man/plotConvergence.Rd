@@ -5,9 +5,10 @@
 \title{Plot convergence curves}
 \usage{
 plotConvergence(data, problem, type = c("mean", "median"), col = "black",
-  plot.type = "s", lty, title = "Convergence curve(s)", subtitle,
-  xlab = "Time (ms)", ylab = "Value", min.time, max.time, legend = TRUE,
-  legend.pos, legend.inset = c(0.02, 0.05), legend.names, ...)
+  plot.type = "s", lty, title = "Convergence curve(s)", subtitle, xlab,
+  ylab = "Value", time.unit = c("milliseconds", "seconds", "minutes",
+  "hours"), min.time, max.time, legend = TRUE, legend.pos,
+  legend.inset = c(0.02, 0.05), legend.names, ...)
 }
 \arguments{
 \item{data}{data object containing the analysis results}
@@ -21,9 +22,8 @@ the values from the different search runs are aggregated.}
 \item{col}{color(s) of the plotted lines and/or symbols, used cyclically when
 providing a vector. Defaults to \code{"black"}.}
 
-\item{plot.type}{defaults to \code{"s"} (staircase). See
-\code{\link{matplot}} and \code{\link{plot}} for more information about the
-possible plot types.}
+\item{plot.type}{defaults to \code{"s"} (staircase). See \code{\link{matplot}}
+and \code{\link{plot}} for more information about the possible plot types.}
 
 \item{lty}{line type(s), used cyclically when providing a vector. Line types
 default to 1:n where n is the number of plotted curves.}
@@ -34,33 +34,37 @@ default to 1:n where n is the number of plotted curves.}
 states the name of the problem for which the plot was made. If no substitle
 is desired, set \code{subtitle = ""}.}
 
-\item{xlab}{x-axis label. Defaults to \code{"Time (ms)"}.}
+\item{xlab}{x-axis label. Defaults to \code{"Time"} followed by the time unit
+within brackets (abbreviated).}
 
 \item{ylab}{y-axis label. Defaults to \code{"Value"}.}
 
-\item{min.time}{zoom in on the part of the curve(s) above this time on the
-\code{x-}axis.}
+\item{time.unit}{one of \code{"milliseconds"} (default), \code{"seconds"},
+\code{"minutes"} or \code{"hours"}. Determines the time unit of the values
+on the \code{x-}axis.}
 
-\item{max.time}{zoom in on the part of the curve(s) below this time on the
-\code{x-}axis.}
+\item{min.time}{zoom in on the part of the curve(s) after this point in time
+on the \code{x-}axis, according to the specified \code{time.unit}.}
 
-\item{legend}{logical: indicates whether a legend should be added to the
-plot. Defaults to TRUE.}
+\item{max.time}{zoom in on the part of the curve(s) before this point in time
+on the \code{x-}axis, according to the specified \code{time.unit}.}
 
-\item{legend.pos}{position of the legend, specified as a keyword  keyword
-from the list \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"},
+\item{legend}{logical: indicates whether a legend should be added to the plot.
+Defaults to \code{TRUE}.}
+
+\item{legend.pos}{position of the legend, specified as a keyword  keyword from
+the list \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"},
 \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"},
-\code{"right"} and \code{"center"}. Defaults to \code{"bottomright"} in
-case values are being maximized or \code{"topright"} in case of
-minimization.}
+\code{"right"} and \code{"center"}. Defaults to \code{"bottomright"} in case
+values are being maximized or \code{"topright"} in case of minimization.}
 
 \item{legend.inset}{inset distance(s) from the margins as a fraction of the
-plot region. If a single value is given, it is used for both margins; if
-two values are given, the first is used for \code{x-}distance, the second
-for \code{y-}distance. Defaults to \code{c(0.02, 0.05)}.}
+plot region. If a single value is given, it is used for both margins; if two
+values are given, the first is used for \code{x-}distance, the second for
+\code{y-}distance. Defaults to \code{c(0.02, 0.05)}.}
 
 \item{legend.names}{names to be shown in the legend. Defaults to the search
-names obtained from calling \code{\link{getSearches}} on the given
+names obtained from calling \code{\link{getSearches}} for the given
 \code{data} and \code{problem}.}
 
 \item{...}{optional other arguments passed to \code{\link{matplot}}.}
@@ -76,9 +80,9 @@ If the \code{data} contains results for a single problem only, the argument
 selection of the applied searches, use \code{\link{reduceJAMES}} to extract
 the respective data.
 
-The curves are plotted using \code{\link{matplot}}. More information about
-the graphical parameters are provided in the documentation of this function.
-By default, a legend is added to the plot. This can be omitted by setting
+The curves are plotted using \code{\link{matplot}}. More information about the
+graphical parameters are provided in the documentation of this function. By
+default, a legend is added to the plot. This can be omitted by setting
 \code{legend = FALSE}. If desired, a custom legend may then be added. It is
 possible to zoom in on a specific region of the plot using the parameters
 \code{min.time} and \code{max.time}.

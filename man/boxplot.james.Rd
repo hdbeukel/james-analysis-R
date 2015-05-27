@@ -5,7 +5,8 @@
 \title{Solution quality and convergence time box plots}
 \usage{
 \method{boxplot}{james}(x, problem, type = c("quality", "time"), r = 0.99,
-  title, subtitle, ylab, names, ...)
+  time.unit = c("milliseconds", "seconds", "minutes", "hours"), title,
+  subtitle, ylab, names, ...)
 }
 \arguments{
 \item{x}{data object containing the analysis results}
@@ -14,14 +15,20 @@
 if the data \code{x} contains results for a single problem only.}
 
 \item{type}{one of \code{"quality"} (default) or \code{"time"}. If set to
-"quality", the final solution's value is reported; if set to "time", the
-time until convergence is reported. In both cases, the respective
-distribution of values found during the different search runs is shown. In
-the latter case, the argument \code{r} is used to decide when a search run
-has converged.}
+\code{"quality"}, the final solution's value is reported; if set to
+\code{"time"}, the time until convergence is reported. In both cases, the
+respective distribution of values found during the different search runs is
+visualized. In the latter case, the argument \code{r} is used to decide
+when a search run has converged.}
 
 \item{r}{convergence ratio, only used if \code{type} is \code{"time"}.
-Defaults to 0.99. Should be a numeric value in [0,1].}
+Defaults to 0.99. Should be a numeric value in [0,1]. This parameter is
+passed to \code{\link{getConvergenceTimes}}.}
+
+\item{time.unit}{one of \code{"milliseconds"} (default), \code{"seconds"},
+\code{"minutes"} or \code{"hours"}. Only used if \code{type} is
+\code{"time"}. Determines the time unit of the convergence times on the
+\code{y-}axis.}
 
 \item{title}{plot title. Defaults to \code{"Solution quality"} or
 \code{"Convergence time"} when \code{type} is set to \code{"quality"} or
@@ -32,11 +39,12 @@ the name of the problem for which the plot is made. If \code{type} is
 \code{"time"} the subtitle also mentions the applied convergence ratio
 \code{r}. If no subtitle is desired set \code{subtitle = ""}.}
 
-\item{ylab}{y-axis label. Defaults to \code{"Value"} or \code{"Time (ms)"}
-when \code{type} is set to \code{"quality"} or \code{"time"}, respectively.}
+\item{ylab}{y-axis label. Defaults to \code{"Value"} or \code{"Time"} (with
+the time unit indicated between brackets) when \code{type} is set to
+\code{"quality"} or \code{"time"}, respectively.}
 
 \item{names}{names to be shown on the x-axis under the box plots. Defaults to
-the search names obtained from calling \code{\link{getSearches}} on the
+the search names obtained from calling \code{\link{getSearches}} for the
 given data \code{x} and \code{problem}.}
 
 \item{...}{any additional parameters are passed to \code{\link{boxplot}}.}
