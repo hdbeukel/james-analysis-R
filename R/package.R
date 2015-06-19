@@ -10,8 +10,8 @@
 #' \tabular{ll}{
 #' Package: \tab james.analysis\cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.0.1\cr
-#' Date: \tab 2015-06-18\cr
+#' Version: \tab 1.0.1.9000\cr
+#' Date: \tab 2015-06-19\cr
 #' License: \tab MIT\cr
 #' }
 #' 
