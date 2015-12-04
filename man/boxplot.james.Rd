@@ -49,6 +49,10 @@ given data \code{x} and \code{problem}.}
 
 \item{...}{any additional parameters are passed to \code{\link{boxplot}}.}
 }
+\value{
+Box plot summary data: list with components as defined in the
+  documentation of \code{\link{boxplot}}.
+}
 \description{
 Produce box-and-whisker plots for the searches that have been applied to the
 given problem, visualizing the distribution of the best found solution's

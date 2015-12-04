@@ -293,7 +293,7 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
 #'   passed to \code{\link{getConvergenceTimes}}.
 #' @param time.unit one of \code{"milliseconds"} (default), \code{"seconds"}, 
 #'   \code{"minutes"} or \code{"hours"}. Only used if \code{type} is 
-#'   \code{"time"}. Determines the time unit of the convergence times on the
+#'   \code{"time"}. Determines the time unit of the convergence times on the 
 #'   \code{y-}axis.
 #' @param title plot title. Defaults to \code{"Solution quality"} or 
 #'   \code{"Convergence time"} when \code{type} is set to \code{"quality"} or 
@@ -309,6 +309,9 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
 #'   the search names obtained from calling \code{\link{getSearches}} for the 
 #'   given data \code{x} and \code{problem}.
 #' @param ... any additional parameters are passed to \code{\link{boxplot}}.
+#'   
+#' @return Box plot summary data: list with components as defined in the
+#'   documentation of \code{\link{boxplot}}.
 #'   
 #' @importFrom graphics boxplot
 #' @export
@@ -374,10 +377,13 @@ boxplot.james <- function(x, problem, type = c("quality", "time"), r = 0.99,
     names <- searches
   }
   
-  # create box pot
-  boxplot(search.dists, main = title, ylab = ylab, names = names, ...)
+  # create box plot
+  b <- boxplot(search.dists, main = title, ylab = ylab, names = names, ...)
   # add subtitle
   mtext(subtitle, line = 0.25)
+  
+  # return box plot summary data
+  return(b)
   
 }
 
