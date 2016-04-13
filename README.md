@@ -2,6 +2,7 @@ JAMES Analysis R Package
 ========================
 
 [![Build Status](https://img.shields.io/travis/hdbeukel/james-analysis-R.svg?style=flat)](https://travis-ci.org/hdbeukel/james-analysis-R)
+[![CRAN version](http://www.r-pkg.org/badges/version/james.analysis)](http://cran.rstudio.com/package=james.analysis)
 
 The JAMES analysis R package is part of the [JAMES framework][james-github]. This R package is used to analyze and visualize results obtained using the analysis tools from the [extensions module][james-extensions].
 
