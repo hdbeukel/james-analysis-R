@@ -641,8 +641,22 @@ getConvergenceTimes.james <- function(data, problem, search, r = 0.99){
 
 ################################## SUMMARY ################################## 
 
+#' Print analysis results summary.
+#' 
+#' Displays a table with one row per combination of analyzed dataset
+#' and applied search algorithm. The table reports the average (median)
+#' final solution quality across repeated executions and corresponding
+#' standard deviation (inter-quartile range).
+#' 
+#' @param object analysis results of class \code{james}
+#' @param d number of significant digits (defaults to 3)
+#'
 #' @export
-summary.james <- function(object, ...){
+summary.james <- function(object, d = 3, ...){
+  
+  if(!is.numeric(d) || d < 1){
+    stop("Number of significant digits 'd' should be an integer >= 1.")
+  }
   
   results <- object
   
@@ -652,6 +666,9 @@ summary.james <- function(object, ...){
   search.names <- unique(unlist(sapply(problem.names, function(p){getSearches(results, p)})))
   col.widths[1] <- max(col.widths[1], max(sapply(problem.names, nchar)))
   col.widths[2] <- max(col.widths[2], max(sapply(search.names, nchar)))
+  for(col in 4:7){
+    col.widths[col] <- max(col.widths[col], d+5)
+  }
   format <- sprintf("%%-%ds  %%-%ds  %%%ds  %%%ds  %%%ds  %%%ds  %%%ds\n",
                     col.widths[1], col.widths[2], col.widths[3],
                     col.widths[4], col.widths[5], col.widths[6],
@@ -664,9 +681,13 @@ summary.james <- function(object, ...){
   printf(format, "Problem:", "Search:", "Runs:", "Mean value:", "St. dev:", "Median:", "IQR:")
   printf(format, lines[[1]], lines[[2]], lines[[3]], lines[[4]], lines[[5]], lines[[6]], lines[[7]])
   
-  # update format for real value printing (last two columns)
-  format <- sprintf("%%-%ds  %%-%ds  %%%ds  %%11.3g  %%8.3g  %%8.3g  %%8.3g\n",
-                    col.widths[1], col.widths[2], col.widths[3])
+  # update format for real value printing
+  format <- sprintf("%%-%ds  %%-%ds  %%%ds  %%%d.%dg  %%%d.%dg  %%%d.%dg  %%%d.%dg\n",
+                    col.widths[1], col.widths[2], col.widths[3],
+                    col.widths[4], d,
+                    col.widths[5], d,
+                    col.widths[6], d,
+                    col.widths[7], d)
   
   # print info of applied searches per problem
   for (problem in problem.names){
