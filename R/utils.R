@@ -95,7 +95,10 @@ getSingleSearch <- function(data, problem){
 #' error is thrown. Argument 'problem' can be omitted if 'data' contains
 #' results for a single problem only.
 #' 
-#' @importFrom util head tail
+#' @param data analysis results of class \code{james}
+#' @param problem name of problem
+#' 
+#' @importFrom utils head tail
 isMinimizing <- function(data, problem){
   # fall back to single problem if missing
   if(missing(problem)){
