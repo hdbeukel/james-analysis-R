@@ -650,6 +650,7 @@ getConvergenceTimes.james <- function(data, problem, search, r = 0.99){
 #' 
 #' @param object analysis results of class \code{james}
 #' @param d number of significant digits (defaults to 3)
+#' @param ... any remaining arguments are ignored
 #'
 #' @export
 summary.james <- function(object, d = 3, ...){

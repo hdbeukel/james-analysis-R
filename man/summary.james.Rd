@@ -10,6 +10,8 @@
 \item{object}{analysis results of class \code{james}}
 
 \item{d}{number of significant digits (defaults to 3)}
+
+\item{...}{any remaining arguments are ignored}
 }
 \description{
 Displays a table with one row per combination of analyzed dataset
