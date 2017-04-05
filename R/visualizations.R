@@ -64,6 +64,8 @@
 #'  \code{data} and \code{problem}.
 #'@param ... optional other arguments passed to \code{\link{matplot}}.
 #'  
+#'@importFrom utils head tail
+#'@importFrom graphics matplot mtext
 #'@export
 plotConvergence <- function(data, problem, type = c("mean", "median"),
                             col = "black", plot.type = "s", lty,
@@ -313,7 +315,7 @@ plotConvergence.james <- function(data, problem, type = c("mean", "median"),
 #' @return Box plot summary data: list with components as defined in the
 #'   documentation of \code{\link{boxplot}}.
 #'   
-#' @importFrom graphics boxplot
+#' @importFrom graphics boxplot mtext
 #' @export
 boxplot.james <- function(x, problem, type = c("quality", "time"), r = 0.99,
                           time.unit = c("milliseconds", "seconds", "minutes", "hours"),

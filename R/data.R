@@ -217,6 +217,7 @@ readJAMES <- function(file) {
 mergeJAMES <- function(data1, data2){
   UseMethod("mergeJAMES")
 }
+#' @importFrom utils glob2rx
 #' @export
 mergeJAMES.james <- function(data1, data2){
   # check input
@@ -516,6 +517,7 @@ getNumSearchRuns.james <- function(data, problem, search){
 getBestSolutionValues <- function(data, problem, search){
   UseMethod("getBestSolutionValues")
 }
+#' @importFrom utils tail
 #' @export
 getBestSolutionValues.james <- function(data, problem, search){
   # extract search runs
@@ -652,6 +654,7 @@ getConvergenceTimes.james <- function(data, problem, search, r = 0.99){
 #' @param d number of significant digits (defaults to 3)
 #' @param ... any remaining arguments are ignored
 #'
+#' @importFrom stats sd median IQR
 #' @export
 summary.james <- function(object, d = 3, ...){
   

@@ -88,11 +88,14 @@ getSingleSearch <- function(data, problem){
   }
 }
 
-# Check if values are being maximized or minimized for a given problem,
-# by comparing the first and last obtained value. If contradicting results
-# are found for different searches or runs solving the same problem, an
-# error is thrown. Argument 'problem' can be omitted if 'data' contains
-# results for a single problem only.
+#' Check if values are being maximized or minimized for a given problem.
+#' 
+#' Compares the first and last obtained value. If contradicting results
+#' are found for different searches or runs solving the same problem, an
+#' error is thrown. Argument 'problem' can be omitted if 'data' contains
+#' results for a single problem only.
+#' 
+#' @importFrom util head tail
 isMinimizing <- function(data, problem){
   # fall back to single problem if missing
   if(missing(problem)){
